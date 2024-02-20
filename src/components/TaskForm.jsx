@@ -46,6 +46,21 @@ const TaskForm = () => {
           console.error("Error:", error);
         }
       };
+
+      return (
+        <div>
+          <TaskActions />
+          <div className="FormBigBox">
+            <div className="FormBox">
+              {/* ... (form structure) */}
+              <button className="CreateTaskBtn" type="submit">
+                Create Task
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+      
       
       
 
