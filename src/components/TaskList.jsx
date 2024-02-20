@@ -128,7 +128,47 @@ useEffect(() => {
       });
   };
 
+  return (
+    <div className='container'>
+      <h2>Task List</h2>
+      {tasks.map(task => (
+        <div key={task.id} style={{ marginBottom: '20px', border: '1px solid black', padding: '10px' }}>
+          <h3 onClick={() => handleTaskClick(task.id)} style={{ cursor: 'pointer' }}>{task.title}</h3>
+          {selectedTask === task.id &&
+            <div>
+              <p>Description: {task.description}</p>
+              <p>Category: {task.category}</p>
+              <p>Due Date: {task.due_date}</p>
+              <p>Priority: {task.priority}</p>
+              <p>Status: {task.status}</p>
+              <p>Reminder Date: {task.reminder_date}</p>
+              <p>Recurrence Pattern: {task.recurrence_pattern}</p>
+              <h4>Comments:</h4>
+              {comments[task.id] && comments[task.id].map(comment => (
+                <div key={comment.id}>
+                  <p>{comment.comment}</p>
+                  <button onClick={() => handleDeleteComment(task.id, comment.id)}>Delete Comment</button>
+                </div>
+              ))}
+              <input type="text" value={commentInput} onChange={handleCommentChange} />
+              <button onClick={() => handleCommentSubmit(task.id)}>Add Comment</button>
+              <button onClick={() => handleDeleteTask(task.id)}>Delete Task</button>
+              <Link to={`/updatetask/${task.id}`}>
+                <button>Update Task</button>
+              </Link>
+            </div>
+          }
+        </div>
+      ))}
+      <Link to="/taskform">Create New Task</Link>
+    </div>
+  );
+};
+
+export default TaskList;
   
+
+
   
   
   
