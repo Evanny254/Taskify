@@ -27,3 +27,26 @@ function AuthHandler({ user, setUser }) {
             console.error('Sign in failed:', error);
         }
     };
+
+    const handleRegister = async (username, email, password) => {
+        try {
+            const response = await fetch('https://taskify-8h37.onrender.com/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+            if (response.ok) {
+                const userData = await response.json();
+                setUser(userData);
+                alert('Registration successful! Please sign in.'); // Print message to the user
+                console.log('Registration successful! User data:', userData); // Log to the console
+                navigate('/signin'); // Redirect to SignIn after successful sign up
+            } else {
+                console.error('Sign up failed:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Sign up failed:', error);
+        }
+    };
