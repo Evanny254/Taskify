@@ -72,6 +72,24 @@ useEffect(() => {
         console.error('Error submitting comment:', error);
       });
   };
+
+  const handleDeleteComment = (taskId, commentId) => {
+    // Send a DELETE request to remove a comment from a specific task
+    fetch(`https://taskify-8h37.onrender.com/tasks/${taskId}/comments/${commentId}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        // Update the 'comments' state by removing the deleted comment
+        setComments(prevState => ({
+          ...prevState,
+          [taskId]: prevState[taskId].filter(comment => comment.id !== commentId)
+        }));
+      })
+      .catch(error => {
+        console.error('Error deleting comment:', error);
+      });
+  };
+  
   
   
   
