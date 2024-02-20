@@ -43,6 +43,12 @@ useEffect(() => {
       fetchComments(taskId);
     }
   };
+
+  const handleCommentChange = (e) => {
+    // Update the 'commentInput' state as the user types
+    setCommentInput(e.target.value);
+  };
+  
   
   
   
