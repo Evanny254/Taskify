@@ -33,6 +33,17 @@ useEffect(() => {
         console.error('Error fetching comments:', error);
       });
   };
+
+  const handleTaskClick = (taskId) => {
+    if (selectedTask === taskId) {
+      setSelectedTask(null);
+    } else {
+      // Set the selected task and fetch comments for it
+      setSelectedTask(taskId);
+      fetchComments(taskId);
+    }
+  };
+  
   
   
 
