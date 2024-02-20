@@ -35,3 +35,12 @@ const AccountDetails = () => {
         console.error('Error fetching user details:', error);
       });
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
