@@ -50,3 +50,23 @@ function AuthHandler({ user, setUser }) {
             console.error('Sign up failed:', error);
         }
     };
+
+    const handleSignOut = async () => {
+        try {
+            const response = await fetch('https://taskify-8h37.onrender.com/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.ok) {
+                setUser(null);
+                navigate('/signin'); // Redirect to sign-in page after sign out
+            } else {
+                console.error('Sign out failed:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Sign out failed:', error);
+        }
+    };
+
