@@ -56,3 +56,55 @@ const AccountDetails = () => {
     return <div>Loading...</div>; // You can render a loading indicator while fetching user details
   }
 
+
+  return (
+    <div className='container'>
+      <h2>Account Details</h2>
+      {!editMode ? (
+        <div>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+          <p>Bio: {user.bio}</p>
+          <button onClick={() => setEditMode(true)}>Edit Details</button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Bio:</label>
+            <textarea
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <button type="submit">Save Changes</button>
+          <button onClick={() => setEditMode(false)}>Cancel</button>
+        </form>
+      )}
+    </div>
+  );
+};
+
+export default AccountDetails;
+
