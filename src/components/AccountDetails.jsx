@@ -44,3 +44,15 @@ const AccountDetails = () => {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Here you can submit the formData to the server
+    console.log('Submitting form:', formData);
+    // After submitting, you can switch back to view mode
+    setEditMode(false);
+  };
+
+  if (!user) {
+    return <div>Loading...</div>; // You can render a loading indicator while fetching user details
+  }
+
