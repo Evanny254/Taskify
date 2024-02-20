@@ -89,6 +89,21 @@ useEffect(() => {
         console.error('Error deleting comment:', error);
       });
   };
+
+  const handleDeleteTask = (taskId) => {
+    // Send a DELETE request to remove a task
+    fetch(`https://taskify-8h37.onrender.com/tasks/${taskId}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        // Update the 'tasks' state by removing the deleted task
+        setTasks(tasks.filter(task => task.id !== taskId));
+      })
+      .catch(error => {
+        console.error('Error deleting task:', error);
+      });
+  };
+  
   
   
   
