@@ -70,3 +70,14 @@ function AuthHandler({ user, setUser }) {
         }
     };
 
+    return (
+        <>
+            <SignIn handleLogin={handleLogin} />
+            <SignUp handleRegister={handleRegister} />
+            <Home user={user} onSignOut={handleSignOut} />
+        </>
+    );
+}
+
+export default AuthHandler;
+
