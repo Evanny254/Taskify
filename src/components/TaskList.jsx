@@ -103,6 +103,33 @@ useEffect(() => {
         console.error('Error deleting task:', error);
       });
   };
+
+  const handleUpdateTask = (taskId, updatedTaskData) => {
+    // Send a PUT request to update a task with new data
+    fetch(`https://taskify-8h37.onrender.com/tasks/${taskId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedTaskData)
+    })
+      .then(() => {
+        // Update the 'tasks' state with the updated task data
+        const updatedTasks = tasks.map(task => {
+          if (task.id === taskId) {
+            return { ...task, ...updatedTaskData };
+          }
+          return task;
+        });
+        setTasks(updatedTasks);
+      })
+      .catch(error => {
+        console.error('Error updating task:', error);
+      });
+  };
+
+  
+  
   
   
   
