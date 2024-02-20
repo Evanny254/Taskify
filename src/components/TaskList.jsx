@@ -48,6 +48,31 @@ useEffect(() => {
     // Update the 'commentInput' state as the user types
     setCommentInput(e.target.value);
   };
+
+  const handleCommentSubmit = (taskId) => {
+    // Send a POST request to add a new comment to a specific task
+    fetch(`https://taskify-8h37.onrender.com/tasks/${taskId}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ comment: commentInput })
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Update the 'comments' state with the new comment
+        setComments(prevState => ({
+          ...prevState,
+          [taskId]: [...prevState[taskId], data]
+        }));
+        // Clear the comment input field
+        setCommentInput('');
+      })
+      .catch(error => {
+        console.error('Error submitting comment:', error);
+      });
+  };
+  
   
   
   
