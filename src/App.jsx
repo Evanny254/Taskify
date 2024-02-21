@@ -8,7 +8,7 @@ import ProjectList from './components/ProjectList';
 import TaskForm from './components/TaskForm';
 import ProjectForm from './components/ProjectForm';
 import AccountDetails from './components/AccountDetails';
-import AuthHandler from './components/AuthHandler'; // Import the AuthHandler component
+import AuthHandler from './components/AuthHandler'; 
 import './App.css';
 
 function App() {
@@ -17,10 +17,10 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const accessToken = localStorage.getItem('access_token'); // Retrieve the token from local storage
+        const accessToken = localStorage.getItem('access_token'); 
         const response = await fetch('https://taskify-8h37.onrender.com/user', {
           headers: {
-            'Authorization': `Bearer ${accessToken}` // Include the token in the Authorization header
+            'Authorization': `Bearer ${accessToken}` 
           }
         });
         if (response.ok) {

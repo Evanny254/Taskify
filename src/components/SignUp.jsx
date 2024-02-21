@@ -7,9 +7,9 @@ const SignUp = ({ handleRegister }) => {
   const navigate = useNavigate();
   const {
     formState: { errors, isSubmitting },
-    handleSubmit, // Define handleSubmit here
+    handleSubmit, 
     register,
-  } = useForm(); // Initialize useForm
+  } = useForm(); 
 
   const onSubmit = async (formData) => {
     try {
@@ -18,7 +18,7 @@ const SignUp = ({ handleRegister }) => {
         formData.email,
         formData.password
       );
-      navigate("/signin"); // Assuming 'navigate' is defined elsewhere
+      navigate("/signin"); 
     } catch (err) {
       if (err.response?.status === 409) {
         toast.error("Account already created.");
