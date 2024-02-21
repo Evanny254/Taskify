@@ -72,3 +72,82 @@ const ProjectForm = () => {
         console.error("Error:", error);
       });
   };
+
+  return (
+    <div>
+      <div className="FormBigBox">
+        <div className="FormBox">
+          <h2 className="FormHeader">Create a Project</h2>
+          <form className="Form" onSubmit={handleSubmit}>
+            <div>
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <br />
+            <div>
+              <label>Description:</label>
+              <textarea
+                type="text"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <br />
+            <div>
+              <label>Start Date:</label>
+              <DatePicker
+                selected={formData.start_date}
+                onChange={(date) => setFormData({ ...formData, start_date: date })}
+                dateFormat="yyyy-MM-dd"
+                required
+              />
+            </div>
+            <br />
+            <div>
+              <label>End Date:</label>
+              <DatePicker
+                selected={formData.end_date}
+                onChange={(date) => setFormData({ ...formData, end_date: date })}
+                dateFormat="yyyy-MM-dd"
+                required
+              />
+            </div>
+            <br />
+            <div>
+              <label>Tasks:</label>
+              <select
+                name="tasks"
+                multiple
+                value={formData.tasks}
+                onChange={handleTaskSelect}
+                required
+              >
+                {tasksOptions.map(task => (
+                  <option key={task.id} value={task.id}>{task.name}</option>
+                ))}
+              </select>
+            </div>
+            <br />
+            <button
+              className="CreateProjectBtn"
+              type="submit"
+              onClick={() => alert("Project Submitted Successfully")}
+            >
+              Create Project
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectForm;
