@@ -17,4 +17,49 @@ const ProjectList = () => {
         console.error('Error fetching projects:', error);
       });
   }, []);
-  
+
+  const fetchComments = (projectId) => {
+    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments`)
+      .then(response => response.json())
+      .then(data => {
+        setComments(prevState => ({
+          ...prevState,
+          [projectId]: data
+        }));
+      })
+      .catch(error => {
+        console.error('Error fetching comments:', error);
+      });
+  };
+
+  const handleProjectClick = (projectId) => {
+    setSelectedProject(selectedProject === projectId ? null : projectId);
+    if (selectedProject !== projectId) {
+      fetchComments(projectId);
+    }
+  };
+
+  const handleCommentChange = (e) => {
+    setCommentInput(e.target.value);
+  };
+
+  const handleCommentSubmit = (projectId) => {
+    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ comment: commentInput })
+    })
+      .then(response => response.json())
+      .then(data => {
+        setComments(prevState => ({
+          ...prevState,
+          [projectId]: [...prevState[projectId], data]
+        }));
+        setCommentInput('');
+      })
+      .catch(error => {
+        console.error('Error submitting comment:', error);
+      });
+  };
