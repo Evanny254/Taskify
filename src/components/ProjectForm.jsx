@@ -8,18 +8,17 @@ const ProjectForm = () => {
     description: "",
     start_date: null,
     end_date: null,
-    tasks: [] // To store selected tasks
+    tasks: [] 
   };
 
   const [formData, setFormData] = useState({ ...initialFormData });
-  const [tasksOptions, setTasksOptions] = useState([]); // To store available tasks
+  const [tasksOptions, setTasksOptions] = useState([]); 
 
   useEffect(() => {
-    // Fetch tasks options from server
     fetch("https://taskify-8h37.onrender.com/tasks")
       .then(response => response.json())
       .then(data => {
-        setTasksOptions(data); // Assuming data is an array of task objects
+        setTasksOptions(data); 
       })
       .catch(error => {
         console.error("Error fetching tasks:", error);

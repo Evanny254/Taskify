@@ -10,7 +10,7 @@ const SignIn = ({ handleLogin }) => {
   } = useForm();
 
   const onSubmit = (formData) => {
-    console.log(handleLogin); // Log the handleLogin function
+    console.log(handleLogin); 
     handleLogin(formData.username, formData.password);
   };
   return (
