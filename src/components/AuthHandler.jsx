@@ -19,7 +19,7 @@ function AuthHandler({ user, setUser }) {
             if (response.ok) {
                 const userData = await response.json();
                 setUser(userData);
-                navigate('/home'); // Redirect to home after successful login
+                navigate('/home'); 
             } else {
                 console.error('Sign in failed:', response.statusText);
             }
@@ -61,7 +61,7 @@ function AuthHandler({ user, setUser }) {
             });
             if (response.ok) {
                 setUser(null);
-                navigate('/signin'); // Redirect to sign-in page after sign out
+                navigate('/signin'); 
             } else {
                 console.error('Sign out failed:', response.statusText);
             }
