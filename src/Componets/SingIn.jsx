@@ -74,3 +74,5 @@ const SignIn = ({ handleLogin }) => {
     </div>
   );
 };
+
+export default SignIn;
