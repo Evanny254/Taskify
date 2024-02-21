@@ -63,3 +63,72 @@ const ProjectList = () => {
         console.error('Error submitting comment:', error);
       });
   };
+
+  const handleDeleteComment = (projectId, commentId) => {
+    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments/${commentId}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        setComments(prevState => ({
+          ...prevState,
+          [projectId]: prevState[projectId].filter(comment => comment.id !== commentId)
+        }));
+      })
+      .catch(error => {
+        console.error('Error deleting comment:', error);
+      });
+  };
+
+  const handleDeleteProject = (projectId) => {
+    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}`, {
+      method: 'DELETE'
+    })
+      .then(() => {
+        setProjects(projects.filter(project => project.id !== projectId));
+      })
+      .catch(error => {
+        console.error('Error deleting project:', error);
+      });
+  };
+
+  return (
+    <div className='container'>
+      <h2>Project List</h2>
+      {projects.map(project => (
+        <div key={project.id} style={{ marginBottom: '20px', border: '1px solid black', padding: '10px' }}>
+          <h3 onClick={() => handleProjectClick(project.id)} style={{ cursor: 'pointer' }}>{project.name}</h3>
+          {selectedProject === project.id &&
+            <div>
+              <p>Description: {project.description}</p>
+              <p>Start Date: {project.start_date}</p>
+              <p>End Date: {project.end_date}</p>
+              <h4>Tasks:</h4>
+              <ul>
+                {project.tasks.map(task => (
+                  <li key={task.id}>{task.name}</li>
+                ))}
+              </ul>
+              <h4>Comments:</h4>
+              {comments[project.id] && comments[project.id].map(comment => (
+                <div key={comment.id}>
+                  <p>{comment.comment}</p>
+                  <button onClick={() => handleDeleteComment(project.id, comment.id)}>Delete Comment</button>
+                </div>
+              ))}
+              <input type="text" value={commentInput} onChange={handleCommentChange} />
+              <button onClick={() => handleCommentSubmit(project.id)}>Add Comment</button>
+              <button onClick={() => handleDeleteProject(project.id)}>Delete Project</button>
+              <Link to={`/updateproject/${project.id}`}>
+                <button>Update Project</button>
+              </Link>
+            </div>
+          }
+        </div>
+      ))}
+      <Link to="/projectform">Create New Project</Link>
+    </div>
+  );
+};
+
+export default ProjectList;
+
