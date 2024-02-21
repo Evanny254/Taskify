@@ -86,3 +86,5 @@ const SignUp = ({ handleRegister }) => {
     </div>
   );
 };
+
+export default SignUp;
