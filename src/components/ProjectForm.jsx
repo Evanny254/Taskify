@@ -8,19 +8,19 @@ const ProjectForm = () => {
     description: "",
     start_date: null,
     end_date: null,
-    tasks: [] 
+    tasks: [],
   };
 
   const [formData, setFormData] = useState({ ...initialFormData });
-  const [tasksOptions, setTasksOptions] = useState([]); 
+  const [tasksOptions, setTasksOptions] = useState([]);
 
   useEffect(() => {
     fetch("https://taskify-backend-btvr.onrender.com/tasks")
-      .then(response => response.json())
-      .then(data => {
-        setTasksOptions(data); 
+      .then((response) => response.json())
+      .then((data) => {
+        setTasksOptions(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching tasks:", error);
       });
   }, []);
@@ -29,15 +29,19 @@ const ProjectForm = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === "start_date" || name === "end_date" ? new Date(value) : value,
+      [name]:
+        name === "start_date" || name === "end_date" ? new Date(value) : value,
     });
   };
 
   const handleTaskSelect = (e) => {
-    const selectedTasks = Array.from(e.target.selectedOptions, option => option.value);
+    const selectedTasks = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
     setFormData({
       ...formData,
-      tasks: selectedTasks
+      tasks: selectedTasks,
     });
   };
 
@@ -49,7 +53,7 @@ const ProjectForm = () => {
       description: formData.description,
       start_date: formData.start_date,
       end_date: formData.end_date,
-      tasks: formData.tasks
+      tasks: formData.tasks,
     };
 
     fetch("https://taskify-backend-btvr.onrender.com/projects", {
@@ -104,7 +108,9 @@ const ProjectForm = () => {
               <label>Start Date:</label>
               <DatePicker
                 selected={formData.start_date}
-                onChange={(date) => setFormData({ ...formData, start_date: date })}
+                onChange={(date) =>
+                  setFormData({ ...formData, start_date: date })
+                }
                 dateFormat="yyyy-MM-dd"
                 required
               />
@@ -114,7 +120,9 @@ const ProjectForm = () => {
               <label>End Date:</label>
               <DatePicker
                 selected={formData.end_date}
-                onChange={(date) => setFormData({ ...formData, end_date: date })}
+                onChange={(date) =>
+                  setFormData({ ...formData, end_date: date })
+                }
                 dateFormat="yyyy-MM-dd"
                 required
               />
@@ -129,8 +137,10 @@ const ProjectForm = () => {
                 onChange={handleTaskSelect}
                 required
               >
-                {tasksOptions.map(task => (
-                  <option key={task.id} value={task.id}>{task.name}</option>
+                {tasksOptions.map((task) => (
+                  <option key={task.id} value={task.id}>
+                    {task.name}
+                  </option>
                 ))}
               </select>
             </div>
