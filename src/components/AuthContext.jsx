@@ -5,12 +5,12 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('access_token'));
 
-  const login = () => {
+  const SignIn = () => {
     // Perform login logic, set isAuthenticated to true
     setIsAuthenticated(true);
   };
 
-  const logout = () => {
+  const SignOut = () => {
     // Clear the access token on logout
     localStorage.removeItem('access_token');
     // Update the authentication state
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, SignIn, SignOut }}>
       {children}
     </AuthContext.Provider>
   );
