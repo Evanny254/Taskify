@@ -1,23 +1,15 @@
-// PrivateRoute.js
-import { Outlet, Navigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { Route, Navigate } from 'react-router-dom';
 
-const PrivateRoute = ({ path }) => {
-  const token = localStorage.getItem('accessToken');
-  const isAuthenticated = !!token;
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const isAuthenticated = localStorage.getItem('accessToken');
 
-  const protectedRoutes = ['/home'];
-
-  if (protectedRoutes.includes(path) && !isAuthenticated) {
-    // Redirect to login if the route requires authentication and the user is not authenticated
-    return <Navigate to="/signin" />;
-  }
-
-  // If authenticated, set the authorization header for future requests
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-  // Render the protected content
-  return <Outlet />;
+  return (
+    <Route
+      {...rest}
+      element={isAuthenticated ? <Component {...rest} /> : <Navigate to="/signin" />}
+    />
+  );
 };
 
 export default PrivateRoute;

@@ -4,15 +4,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
 
-import { LuLock, LuMail, LuPhone, LuUser } from "react-icons/lu";
+import { LuLock, LuMail } from 'react-icons/lu';
 
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+
+const SignIn = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
 
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
     try {
@@ -25,19 +27,16 @@ const Login = () => {
       );
 
       const { access_token, refresh_token } = response.data;
-
-      // Store tokens securely (e.g., in memory, secure storage)
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-
-      // Set authorization header for future requests
-      axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-
-      // Redirect to the dashboard page after successful login
-      navigate("/home");
+  
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+  
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+  
+      navigate('/home');
     } catch (error) {
-      console.error("Login error:", error);
-      // Handle login error (e.g., display error message to the user)
+      console.error('Login error:', error);
+      
     }
   };
 
@@ -51,18 +50,17 @@ const Login = () => {
         </h1>
       </div>
       {/* Login Form */}
-      <div className="w-2/5 mx-auto shadowy border border-brown-100 p-8 rounded-md overflow-hidden">
-        <h2 className="text-3xl text-center font-semibold font-display">
-          Login
-        </h2>
-        <form onSubmit={handleLogin} className="grid gap-8 mt-8">
+      <div className='w-2/5 mx-auto shadowy border border-brown-100 p-8 rounded-md overflow-hidden'>
+        <h2 className='text-3xl text-center font-semibold font-display'>Sign In</h2>
+        <form onSubmit={handleSignIn} className='grid gap-8 mt-8'>
+
           {/*username */}
           <div className="flex gap-2 items-center border-b border-gray-300 ">
             <LuMail size={25} className="text-gray-400" />
             <input
-              type="text"
-              className="text-lg focus:outline-none py-1 placeholder:capitalize"
-              placeholder="Email Address"
+              type='text'
+              className='text-lg focus:outline-none py-1 placeholder:capitalize'
+              placeholder='Username'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -107,6 +105,6 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;
 
 /*Authorization: `Bearer ${accessToken}`*/
