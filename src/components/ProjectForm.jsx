@@ -15,7 +15,7 @@ const ProjectForm = () => {
   const [tasksOptions, setTasksOptions] = useState([]); 
 
   useEffect(() => {
-    fetch("https://taskify-8h37.onrender.com/tasks")
+    fetch("https://taskify-backend-btvr.onrender.com/tasks")
       .then(response => response.json())
       .then(data => {
         setTasksOptions(data); 
@@ -52,7 +52,7 @@ const ProjectForm = () => {
       tasks: formData.tasks
     };
 
-    fetch("https://taskify-8h37.onrender.com/projects", {
+    fetch("https://taskify-backend-btvr.onrender.com/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -8,7 +8,7 @@ const ProjectList = () => {
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    fetch('https://taskify-8h37.onrender.com/projects')
+    fetch('https://taskify-backend-btvr.onrender.com/projects')
       .then(response => response.json())
       .then(data => {
         setProjects(data);
@@ -19,7 +19,7 @@ const ProjectList = () => {
   }, []);
 
   const fetchComments = (projectId) => {
-    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments`)
+    fetch(`https://taskify-backend-btvr.onrender.com/${projectId}/comments`)
       .then(response => response.json())
       .then(data => {
         setComments(prevState => ({
@@ -44,7 +44,7 @@ const ProjectList = () => {
   };
 
   const handleCommentSubmit = (projectId) => {
-    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments`, {
+    fetch(`hhttps://taskify-backend-btvr.onrender.com/${projectId}/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteComment = (projectId, commentId) => {
-    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}/comments/${commentId}`, {
+    fetch(`https://taskify-backend-btvr.onrender.com/${projectId}/comments/${commentId}`, {
       method: 'DELETE'
     })
       .then(() => {
@@ -80,7 +80,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteProject = (projectId) => {
-    fetch(`https://taskify-8h37.onrender.com/projects/${projectId}`, {
+    fetch(`https://taskify-backend-btvr.onrender.com/${projectId}`, {
       method: 'DELETE'
     })
       .then(() => {

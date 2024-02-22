@@ -106,7 +106,7 @@ useEffect(() => {
 
   const handleUpdateTask = (taskId, updatedTaskData) => {
     // Send a PUT request to update a task with new data
-    fetch(`https://taskify-8h37.onrender.com/tasks/${taskId}`, {
+    fetch(`https://taskify-backend-btvr.onrender.com/${taskId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
