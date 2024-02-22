@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/NavBar';
@@ -14,8 +15,8 @@ import AccountDetails from './components/AccountDetails';
 import './App.css';
 
 
-function App() {
 
+function App() {
 
   return (
     <Router>
