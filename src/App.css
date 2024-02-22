@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #root {
+=======
+/* #root {
+>>>>>>> e27ded3f61776f5228646a76c1cdd624918ab51d
   max-width: 500px;
   margin: 0 auto;
   padding: 2rem;
@@ -112,4 +116,8 @@ button:hover {
 
 .link:hover {
   text-decoration: underline;
+<<<<<<< HEAD
 }
+=======
+} */
+>>>>>>> e27ded3f61776f5228646a76c1cdd624918ab51d
