@@ -38,7 +38,7 @@ const TaskForm = () => {
       recurrence_pattern: formData.recurrence_pattern
     };
 
-    fetch("https://taskify-8h37.onrender.com/tasks", {
+    fetch("https://taskify-backend-btvr.onrender.com/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

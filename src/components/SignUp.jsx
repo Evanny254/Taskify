@@ -1,86 +1,111 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom';
+import { FaTasks } from "react-icons/fa";
 
-const SignUp = ({ handleRegister }) => {
+
+import { LuLock, LuMail, LuPhone, LuUser } from 'react-icons/lu';
+
+
+function SignUp() {
+  const[username, setUsername] = useState("")
+  const[email, setEmail] = useState("")
+  const[password, setPassword] = useState("")
+
   const navigate = useNavigate();
-  const {
-    formState: { errors, isSubmitting },
-    handleSubmit, 
-    register,
-  } = useForm(); 
 
-  const onSubmit = async (formData) => {
+  const handleSignUp = async(e)=> {
+    e.preventDefault()
     try {
-      await handleRegister(
-        formData.username,
-        formData.email,
-        formData.password
-      );
-      navigate("/signin"); 
-    } catch (err) {
-      if (err.response?.status === 409) {
-        toast.error("Account already created.");
+      const response = await fetch('https://taskify-backend-btvr.onrender.com/register', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, email, password }),
+      });
+      if (!response.ok) {
+      console.error('Sign up failed:', response.statusText);
       }
-    }
-  };
+      const data = await response.json();
+      console.log('Sign up successful', data);
+      
+      navigate("/signin")
+  } catch (error) {
+      console.error('Sign up failed:', error);
+  }
+    
+  }
 
   return (
-    <div className="container pt-16 pb-10 lg:pt-[6rem] lg:pb-[4.5rem]">
-      <h1 className="text-center font-semibold text-3xl lg:text-4xl lg:max-w-3xl lg:mx-auto">
-        The <span className="text-primary">Essential</span> Tool for Your Daily{" "}
-        <span className="text-primary">Success:</span> Sign Up Now
-      </h1>
-      <div className="mt-8 md:flex md:justify-center md:mt-16">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-y-6 w-full md:w-[468px]"
-        >
-          <div className="flex flex-col gap-y-2">
-            <label htmlFor="username" className="text-base">
-              Username
-            </label>
+    <div className='p-8 relative'>
+      {/* logo */}
+      <div className='w-full md:w-2/5 md:mx-auto flex justify-center my-4'>
+        <h1 className='text-4xl ml-8 font-extrabold font-dancing-script flex items-center text-cyan-500'>
+          Taskify
+          <FaTasks size={35} className= 'text-cyan-500' />
+        </h1>
+      </div>
+      {/* register form */}
+      <div className='w-5/6 md:w-2/5 mx-auto shadowy border border-pink-100 md:p-8 rounded-md overflow-hidden'>
+        <h2 className='text-3xl text-center font-semibold font-display'>Sign Up</h2>
+        <form onSubmit={handleSignUp} className='grid md:gap-8 mt-8'>
+          {/* name */}
+          <div className='flex gap-2 items-center border-b border-gray-300 '>
+            <LuUser size={25} className='text-gray-400' />
             <input
-              {...register("username")}
-              type="text"
-              id="username"
-              autoComplete="off"
+              type='text'
+              name='username'
+              value={username}
+              onChange={(e)=> setUsername(e.target.value)}
+              className='text-lg focus:outline-none py-1 placeholder:capitalize'
+              placeholder='Username'
+              required
             />
-            {errors.username && (
-              <p className="text-red-500">{errors.username.message}</p>
-            )}
           </div>
-          <div className="flex flex-col gap-y-2">
-            <label htmlFor="email" className="text-base">
-              Email
-            </label>
+          {/* email */}
+          <div className='flex gap-2 items-center border-b border-gray-300 '>
+            <LuMail size={25} className='text-gray-400' />
             <input
-              {...register("email")}
-              type="text"
-              id="email"
-              autoComplete="off"
+              type='email'
+              name='email'
+              value={email}
+              onChange={(e)=> setEmail(e.target.value)}
+              className='text-lg focus:outline-none py-1 placeholder:capitalize'
+              placeholder='Email Address'
+              required
             />
-            {errors.email && (
-              <p className="text-red-500">{errors.email.message}</p>
-            )}
           </div>
-          <div className="flex flex-col gap-y-2">
-            <label htmlFor="password" className="text-base">
-              Password
-            </label>
-            <input {...register("password")} type="password" id="password" />
-            {errors.password && (
-              <p className="text-red-500">{errors.password.message}</p>
-            )}
+          {/* password */}
+          <div className='flex gap-2 items-center border-b border-gray-300 '>
+            <LuLock size={25} className='text-gray-400' />
+            <input
+              type='password'
+              name='password'
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
+              className='text-lg focus:outline-none py-1 placeholder:capitalize'
+              placeholder='Password'
+              required
+            />
           </div>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting && <div className="mr-2 w-5 h-5 animate-spin" />}
+          <button
+            type='submit'
+            className='bg-cyan-500 text-white font-semibold py-4 w-1/2 mx-auto rounded-lg'
+          >
             Sign Up
           </button>
-          <Link to="/signin" className="text-center text-base">
-            Go back to signin
-          </Link>
+          <p className='text-center my-2'>
+            Have an account?{' '}
+            <Link to={'/signin'} className='cursor-pointer text-cyan-500 capitalize'>
+              Sign In
+            </Link>
+          </p>
+          <p>
+            By creating an account, you agree to our{' '}
+            <span className='cursor-pointer text-cyan-500 capitalize'>
+              terms & conditions
+            </span>
+          </p>
         </form>
       </div>
     </div>

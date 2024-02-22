@@ -1,78 +1,109 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { FaTasks } from "react-icons/fa";
 
-const SignIn = ({ handleLogin }) => {
-  const {
-    formState: { errors, isSubmitting },
-    handleSubmit,
-    register,
-  } = useForm();
+import { LuLock, LuMail, LuPhone, LuUser } from 'react-icons/lu';
 
-  const onSubmit = (formData) => {
-    console.log(handleLogin); 
-    handleLogin(formData.username, formData.password);
+
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post('https://taskify-backend-btvr.onrender.com/login', {
+        username: username,
+        password: password
+      });
+  
+      const { access_token, refresh_token } = response.data;
+  
+      // Store tokens securely (e.g., in memory, secure storage)
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+  
+      // Set authorization header for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+  
+      // Redirect to the dashboard page after successful login
+      navigate('/home');
+    } catch (error) {
+      console.error('Login error:', error);
+      // Handle login error (e.g., display error message to the user)
+    }
   };
+  
+
   return (
-    <div className="container pt-16 pb-10 lg:pt-[6rem] lg:pb-[4.5rem]">
-      <h1 className="text-center font-semibold text-3xl lg:text-4xl lg:max-w-3xl lg:mx-auto">
-        Welcome Back: Your <span className="text-primary">Productivity</span>{" "}
-        Journey Starts Here
-      </h1>
-      <div className="mt-8 md:flex md:justify-center md:mt-16">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-y-6 w-full md:w-[468px]"
-        >
-          <div className="flex flex-col gap-y-2">
-            <label
-              htmlFor="username"
-              className={errors.username ? "text-red-500" : "text-base"}
-            >
-              Username
-            </label>
+    <div className='p-8 relative'>
+      {/* Logo */}
+      <div className='w-2/5 mx-auto flex justify-center my-4'>
+        <h1 className='text-4xl ml-8 font-extrabold font-dancing-script flex items-center text-cyan-500'>
+        Taskify
+          <FaTasks size={35} className= 'text-cyan-500' />
+        </h1>
+      </div>
+      {/* Login Form */}
+      <div className='w-2/5 mx-auto shadowy border border-brown-100 p-8 rounded-md overflow-hidden'>
+        <h2 className='text-3xl text-center font-semibold font-display'>Login</h2>
+        <form onSubmit={handleLogin} className='grid gap-8 mt-8'>
+          {/*username */}
+          <div className='flex gap-2 items-center border-b border-gray-300 '>
+            <LuMail size={25} className='text-gray-400' />
             <input
-              {...register("username")}
-              type="text"
-              id="username2"
-              autoComplete="off"
-              className={errors.username ? "focus-visible:ring-red-500" : ""}
+              type='text'
+              className='text-lg focus:outline-none py-1 placeholder:capitalize'
+              placeholder='Email Address'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
             />
-            {errors.username && (
-              <p className="text-red-500">{errors.username.message}</p>
-            )}
           </div>
-          <div className="flex flex-col gap-y-2">
-            <label
-              htmlFor="password"
-              className={errors.password ? "text-red-500" : "text-base"}
-            >
-              Password
-            </label>
-            <input
-              {...register("password")}
-              type="password"
-              id="password1" // Changed the id to be unique
-              autoComplete="off"
-              className={errors.password ? "focus-visible:ring-red-500" : ""}
-            />
-            {errors.password && (
-              <p className="text-red-500">{errors.password.message}</p>
-            )}
+
+          {/* Password */}
+          <div>
+            <div className='flex gap-2 items-center border-b border-gray-300 '>
+              <LuLock size={25} className='text-gray-400' />
+              <input
+                type='password'
+                className='text-lg focus:outline-none py-1 placeholder:capitalize'
+                placeholder='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {/* Forgot Password */}
+            <div className='flex justify-end mt-2'>
+              <Link to='/forgot-password' className='text-cyan-500'>
+                Forgot password?
+              </Link>
+            </div>
           </div>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting && <div className="mr-2 w-5 h-5 animate-spin" />}
-            Sign In
+          <button
+            type='submit'
+            className='bg-cyan-500 text-white font-semibold py-4 w-1/2 mx-auto rounded-lg'
+          >
+            SignIn
           </button>
-          <Link to="/signup" className="text-center text-base">
-            Don't have an account yet?
-            <br />
-            Create one
-          </Link>
+          <p className='text-center'>
+            Don't have an account{' '}
+            <Link to='/signup' className='text-brown-500 capitalize'>
+              Sign Up
+            </Link>
+          </p>
         </form>
       </div>
     </div>
   );
 };
 
-export default SignIn;
+export default Login;
+
+/*Authorization: `Bearer ${accessToken}`*/
