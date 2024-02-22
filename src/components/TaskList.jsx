@@ -8,35 +8,40 @@ const TaskList = () => {
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const accessToken = localStorage.getItem("access_token");
-        const response = await fetch(
-          "https://taskify-backend-btvr.onrender.com/tasks",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
-        }
-        const data = await response.json();
-        console.log("Fetched tasks:", data);
-        setTasks(data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
-
-    fetchTasks();
+    const accessToken = localStorage.getItem("access_token");
+    fetchTasks(accessToken);
   }, []);
 
-  const fetchComments = async (taskId) => {
+  const fetchTasks = async (accessToken) => {
     try {
       const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/comments/${taskId}`
+        "https://taskify-backend-btvr.onrender.com/tasks",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+      const data = await response.json();
+      console.log("Fetched tasks:", data);
+      setTasks(data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
+  const fetchComments = async (accessToken, taskId) => {
+    try {
+      const response = await fetch(
+        `https://taskify-backend-btvr.onrender.com/comments/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
@@ -57,17 +62,20 @@ const TaskList = () => {
       setSelectedTask(null);
     } else {
       setSelectedTask(taskId);
-      fetchComments(taskId);
+      const accessToken = localStorage.getItem("access_token");
+      fetchComments(accessToken, taskId);
     }
   };
 
   const handleCommentSubmit = async (taskId, comment) => {
     try {
+      const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
         `https://taskify-backend-btvr.onrender.com/tasks/comments/${taskId}`,
         {
           method: "POST",
           headers: {
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ comment }),
@@ -80,7 +88,7 @@ const TaskList = () => {
       console.log("Submitted comment:", data);
       setComments((prevState) => ({
         ...prevState,
-        [taskId]: [...prevState[taskId], data],
+        [taskId]: [...(prevState[taskId] || []), data], // Ensure prevState[taskId] is initialized as an array
       }));
     } catch (error) {
       console.error("Error submitting comment:", error);
@@ -89,17 +97,21 @@ const TaskList = () => {
 
   const handleDeleteComment = async (taskId, commentId) => {
     try {
+      const accessToken = localStorage.getItem("access_token");
       await fetch(
-        `https://taskify-backend-btvr.onrender.com/tasks/${taskId}/comments/${commentId}`,
+        `https://taskify-backend-btvr.onrender.com/comments/${commentId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       setComments((prevState) => ({
         ...prevState,
-        [taskId]: prevState[taskId].filter(
+        [taskId]: (prevState[taskId] || []).filter(
           (comment) => comment.id !== commentId
-        ),
+        ), // Ensure prevState[taskId] is initialized as an array
       }));
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -108,8 +120,12 @@ const TaskList = () => {
 
   const handleDeleteTask = async (taskId) => {
     try {
+      const accessToken = localStorage.getItem("access_token");
       await fetch(`https://taskify-backend-btvr.onrender.com/tasks/${taskId}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       setTasks(tasks.filter((task) => task.id !== taskId));
     } catch (error) {
@@ -139,6 +155,7 @@ const TaskList = () => {
               <p>Recurrence Pattern: {task.recurrence_pattern}</p>
               <h4>Comments:</h4>
               {comments[task.id] &&
+                Array.isArray(comments[task.id]) && // Check if comments[task.id] is an array
                 comments[task.id].map((comment) => (
                   <div key={comment.id}>
                     <p>{comment.comment}</p>
