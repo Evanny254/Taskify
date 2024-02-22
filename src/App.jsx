@@ -41,6 +41,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/tasklist" element={<TaskList />} />
         <Route path="/projectlist" element={<ProjectList />} />
+        <Route path="/projectlist" element={<ProjectForm />} />
       </Routes>
     </Router>
   );
