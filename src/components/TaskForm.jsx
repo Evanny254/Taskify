@@ -31,11 +31,11 @@ const TaskForm = () => {
       title: formData.title,
       description: formData.description,
       category: formData.category,
-      due_date: formData.due_date,
+      due_date: formData.due_date instanceof Date ? formData.due_date.toISOString() : null,
       priority: formData.priority,
       status: formData.status,
-      reminder_date: formData.reminder_date,
-      recurrence_pattern: formData.recurrence_pattern
+      reminder_date: formData.reminder_date instanceof Date ? formData.reminder_date.toISOString() : null,
+      recurrence_pattern: formData.recurrence_pattern instanceof Date ? formData.recurrence_pattern.toISOString() : null
     };
     const accessToken = localStorage.getItem('access_token');
     fetch("https://taskify-backend-btvr.onrender.com/tasks", {
@@ -64,7 +64,6 @@ const TaskForm = () => {
       <div className="w-full max-w-md">
         <div className="bg-white rounded shadow-md p-8">
           <h2 className="text-2xl mb-4 font-semibold text-cyan-800">Create a Task</h2>
-          {/* <form onSubmit={(e) => handleSubmit(e, accessToken)}> */}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-cyan-700 font-medium mb-2">Title:</label>
