@@ -15,7 +15,12 @@ const ProjectForm = () => {
   const [tasksOptions, setTasksOptions] = useState([]); 
 
   useEffect(() => {
-    fetch("https://taskify-backend-btvr.onrender.com/tasks")
+    const accessToken = localStorage.getItem('access_token')
+    fetch("https://taskify-backend-btvr.onrender.com/tasks",{
+       headers:{
+        // 'Authorization': `Bearer ${accessToken}`
+       }
+      })
       .then(response => response.json())
       .then(data => {
         setTasksOptions(data); 
@@ -51,11 +56,13 @@ const ProjectForm = () => {
       end_date: formData.end_date,
       tasks: formData.tasks
     };
-
+    // const accessToken = localStorage.getItem('access_token')
     fetch("https://taskify-backend-btvr.onrender.com/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        // 'Authorization': `Bearer ${accessToken}`
+
       },
       body: JSON.stringify(projectData),
     })
