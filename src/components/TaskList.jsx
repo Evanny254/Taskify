@@ -134,61 +134,85 @@ const TaskList = () => {
   };
 
   return (
-    <div className="container">
-      <h2>Task List</h2>
-      {tasks.map((task) => (
-        <div key={task.id}>
-          <h3
-            onClick={() => handleTaskClick(task.id)}
-            style={{ cursor: "pointer" }}
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold text-cyan-800 mb-4 text-center">Task List</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {tasks.map((task) => (
+          <div
+            key={task.id}
+            className="bg-white shadow-md rounded-md overflow-hidden hover:shadow-lg"
           >
-            {task.title}
-          </h3>
-          {selectedTask === task.id && (
-            <div>
-              <p>Description: {task.description}</p>
-              <p>Category: {task.category}</p>
-              <p>Due Date: {task.due_date}</p>
-              <p>Priority: {task.priority}</p>
-              <p>Status: {task.status}</p>
-              <p>Reminder Date: {task.reminder_date}</p>
-              <p>Recurrence Pattern: {task.recurrence_pattern}</p>
-              <h4>Comments:</h4>
-              {comments[task.id] &&
-                Array.isArray(comments[task.id]) && // Check if comments[task.id] is an array
-                comments[task.id].map((comment) => (
-                  <div key={comment.id}>
-                    <p>{comment.comment}</p>
-                    <button
-                      onClick={() => handleDeleteComment(task.id, comment.id)}
-                    >
-                      Delete Comment
-                    </button>
-                  </div>
-                ))}
-              <Formik
-                initialValues={{ comment: "" }}
-                onSubmit={(values, { resetForm }) => {
-                  handleCommentSubmit(task.id, values.comment);
-                  resetForm();
-                }}
+            <div className="p-4">
+              <h3
+                onClick={() => handleTaskClick(task.id)}
+                className="cursor-pointer text-xl font-semibold text-cyan-700 hover:text-cyan-900 mb-2"
               >
-                <Form>
-                  <Field type="text" name="comment" />
-                  <button type="submit">Add Comment</button>
-                </Form>
-              </Formik>
-              <button onClick={() => handleDeleteTask(task.id)}>
-                Delete Task
-              </button>
-              <Link to={`/updatetask/${task.id}`}>
-                <button>Update Task</button>
-              </Link>
+                {task.title}
+              </h3>
+              {selectedTask === task.id && (
+                <div className="mt-2">
+                  <p className="text-cyan-800 mb-2">Description: {task.description}</p>
+                  <p className="text-cyan-800 mb-2">Category: {task.category}</p>
+                  <p className="text-cyan-800 mb-2">Due Date: {task.due_date}</p>
+                  <p className="text-cyan-800 mb-2">Priority: {task.priority}</p>
+                  <p className="text-cyan-800 mb-2">Status: {task.status}</p>
+                  <p className="text-cyan-800 mb-2">Reminder Date: {task.reminder_date}</p>
+                  <p className="text-cyan-800 mb-2">Recurrence Pattern: {task.recurrence_pattern}</p>
+                  <h4 className="text-cyan-800 mb-2">Comments:</h4>
+                  {comments[task.id] &&
+                    Array.isArray(comments[task.id]) &&
+                    comments[task.id].map((comment) => (
+                      <div key={comment.id} className="mb-2">
+                        <p className="text-cyan-800">{comment.comment}</p>
+                        <button
+                          onClick={() => handleDeleteComment(task.id, comment.id)}
+                          className="text-cyan-500 hover:text-cyan-700"
+                        >
+                          Delete Comment
+                        </button>
+                      </div>
+                    ))}
+                  <Formik
+                    initialValues={{ comment: "" }}
+                    onSubmit={(values, { resetForm }) => {
+                      handleCommentSubmit(task.id, values.comment);
+                      resetForm();
+                    }}
+                  >
+                    <Form className="flex items-center mt-2">
+                      <Field
+                        type="text"
+                        name="comment"
+                        className="border border-cyan-300 rounded-md py-1 px-3 focus:outline-none focus:border-cyan-500 flex-1"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded ml-2 focus:outline-none focus:shadow-outline"
+                      >
+                        Add Comment
+                      </button>
+                    </Form>
+                  </Formik>
+                  <div className="flex justify-between mt-4">
+                    <button
+                      onClick={() => handleDeleteTask(task.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Delete Task
+                    </button>
+                    <Link
+                      to={`/updatetask/${task.id}`}
+                      className="text-cyan-500 hover:text-cyan-700"
+                    >
+                      Update Task
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
-      <Link to="/taskform">Create New Task</Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const NavBar = () => {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Link to="/tasks" className="text-white hover:text-cyan-200">
+          <Link to="/tasklist" className="text-white hover:text-cyan-200">
             <FaTasks />
           </Link>
 
@@ -21,7 +21,7 @@ const NavBar = () => {
             <FaPlusSquare />
           </Link>
 
-          <Link to="/projects" className="text-white hover:text-cyan-200">
+          <Link to="/projectlist" className="text-white hover:text-cyan-200">
             <FaProjectDiagram />
           </Link>
 

@@ -27,6 +27,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/home" element={<Home />} />
         <Route path="/tasklist" element={<TaskList />} />
+        {/* <Route path="/updatetask/:id"><UpdateTask /></Route>
+        <Route path="/updateproject/:id"><UpdateTask /></Route> */}
         <Route path="/taskform" element={<TaskForm />} />
         <Route path="/projectlist" element={<ProjectList />} />
         <Route path="/projectform" element={<ProjectForm />} />
