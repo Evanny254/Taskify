@@ -14,8 +14,6 @@ import AccountDetails from './components/AccountDetails';
 
 import './App.css';
 
-
-
 function App() {
 
   return (
