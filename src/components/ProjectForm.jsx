@@ -18,7 +18,7 @@ const ProjectForm = () => {
     const accessToken = localStorage.getItem('access_token')
     fetch("https://taskify-backend-btvr.onrender.com/tasks",{
        headers:{
-        // 'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`
        }
       })
       .then(response => response.json())
