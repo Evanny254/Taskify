@@ -56,7 +56,7 @@ const ProjectForm = () => {
       end_date: formData.end_date,
       tasks: formData.tasks
     };
-    // const accessToken = localStorage.getItem('access_token')
+    const accessToken = localStorage.getItem('access_token')
     fetch("https://taskify-backend-btvr.onrender.com/projects", {
       method: "POST",
       headers: {
