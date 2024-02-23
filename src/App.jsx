@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/NavBar';
@@ -11,6 +10,7 @@ import ProjectList from './components/ProjectList';
 import TaskForm from './components/TaskForm';
 import ProjectForm from './components/ProjectForm';
 import AccountDetails from './components/AccountDetails';
+import About from './components/About';
 
 import './App.css';
 
@@ -26,6 +26,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/tasklist" element={<TaskList />} />
         <Route path="/taskform" element={<TaskForm />} />
+        <Route path="/about" element={<About />} />
         <Route path="/projectlist" element={<ProjectList />} />
         <Route path="/projectform" element={<ProjectForm />} />
         <Route path="/account" element={<AccountDetails />} />
