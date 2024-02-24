@@ -339,9 +339,6 @@ const ProjectList = () => {
           )}
         </div>
       ))}
-      <Link to='/projectform' className='text-cyan-500 hover:underline'>
-        Create New Project
-      </Link>
     </div>
   );
 };
