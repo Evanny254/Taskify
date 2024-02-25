@@ -98,7 +98,75 @@ const TaskList = () => {
     }
   };
 
-  // Other functions remain unchanged
+  const handleDeleteComment = async (taskId, commentId) => {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      await fetch(
+        `https://taskify-backend-btvr.onrender.com/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setComments((prevState) => ({
+        ...prevState,
+        [taskId]: (prevState[taskId] || []).filter(
+          (comment) => comment.id !== commentId
+        ), // Ensure prevState[taskId] is initialized as an array
+      }));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      await fetch(`https://taskify-backend-btvr.onrender.com/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setTasks(tasks.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const handleEditTask = (task) => {
+    setEditedTask(task);
+  };
+
+  const handleUpdateTask = async () => {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      const response = await fetch(
+        `https://taskify-backend-btvr.onrender.com/tasks/${editedTask.id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedTask),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+      // Update the tasks list with the edited task
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === editedTask.id ? editedTask : task))
+      );
+      // Clear the edited task state
+      setEditedTask(null);
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
