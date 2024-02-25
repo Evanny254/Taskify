@@ -4,9 +4,8 @@ import { Formik, Form, Field } from "formik";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
-  const [comms, setComms] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [editedTask, setEditedTask] = useState(null);
 
   useEffect(() => {
@@ -28,14 +27,14 @@ const TaskList = () => {
         throw new Error("Failed to fetch tasks");
       }
       const data = await response.json();
-      console.log("Fetched tasks:", data);
+      // console.log("Fetched tasks:", data);
       setTasks(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  const fetchComms = (accessToken, taskId) => {
+  const fetchComments = (accessToken, taskId) => {
     fetch(`https://taskify-backend-btvr.onrender.com/comments/${taskId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -48,9 +47,9 @@ const TaskList = () => {
         return res.json();
       })
       .then((data) => {
-        console.log("Comms data", taskId, data);
-        setComms(data);
-        console.log(comms);
+        console.log(data);
+        setComments(data);
+        console.log(comments);
       })
       .catch((error) => console.error("Fetch error:", error));
   };
@@ -62,7 +61,7 @@ const TaskList = () => {
       setSelectedTask(taskId);
       const accessToken = localStorage.getItem("access_token");
       // fetchComments(accessToken, taskId);
-      fetchComms(accessToken, taskId);
+      fetchComments(accessToken, taskId);
     }
   };
 
