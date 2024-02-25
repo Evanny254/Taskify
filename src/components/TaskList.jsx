@@ -5,7 +5,7 @@ import { Formik, Form, Field } from "formik";
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [editedTask, setEditedTask] = useState(null);
 
   useEffect(() => {
@@ -27,35 +27,31 @@ const TaskList = () => {
         throw new Error("Failed to fetch tasks");
       }
       const data = await response.json();
-      console.log("Fetched tasks:", data);
+      // console.log("Fetched tasks:", data);
       setTasks(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
   };
 
-  const fetchComments = async (accessToken, taskId) => {
-    try {
-      const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/comments/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+  const fetchComments = (accessToken, taskId) => {
+    fetch(`https://taskify-backend-btvr.onrender.com/comments/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
         }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-      const data = await response.json();
-      console.log("Fetched comments for task:", taskId, data);
-      setComments((prevState) => ({
-        ...prevState,
-        [taskId]: data,
-      }));
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setComments(data);
+        console.log(comments);
+      })
+      .catch((error) => console.error("Fetch error:", error));
   };
 
   const handleTaskClick = (taskId) => {
@@ -64,6 +60,7 @@ const TaskList = () => {
     } else {
       setSelectedTask(taskId);
       const accessToken = localStorage.getItem("access_token");
+      // fetchComments(accessToken, taskId);
       fetchComments(accessToken, taskId);
     }
   };
@@ -72,14 +69,18 @@ const TaskList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/tasks/comments/${taskId}`,
+        `https://taskify-backend-btvr.onrender.com/comments`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ comment }),
+          body: JSON.stringify({
+            text: comment,
+            project_id: null,
+            task_id: taskId,
+          }),
         }
       );
       if (!response.ok) {
@@ -89,7 +90,7 @@ const TaskList = () => {
       console.log("Submitted comment:", data);
       setComments((prevState) => ({
         ...prevState,
-        [taskId]: [...(prevState[taskId] || []), data], // Ensure prevState[taskId] is initialized as an array
+        [taskId]: [...(prevState[taskId] || []), data],
       }));
     } catch (error) {
       console.error("Error submitting comment:", error);
@@ -141,6 +142,7 @@ const TaskList = () => {
   const handleUpdateTask = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
+      console.log(editedTask);
       const response = await fetch(
         `https://taskify-backend-btvr.onrender.com/tasks/${editedTask.id}`,
         {
@@ -157,9 +159,7 @@ const TaskList = () => {
       }
       // Update the tasks list with the edited task
       setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === editedTask.id ? editedTask : task
-        )
+        prevTasks.map((task) => (task.id === editedTask.id ? editedTask : task))
       );
       // Clear the edited task state
       setEditedTask(null);
