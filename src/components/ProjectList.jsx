@@ -6,7 +6,7 @@ const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [commentInput, setCommentInput] = useState('');
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [editedProject, setEditedProject] = useState(null);
   const [tasksOptions, setTasksOptions] = useState([]);
 
@@ -95,7 +95,7 @@ const ProjectList = () => {
     try {
       const accessToken = localStorage.getItem('access_token');
       const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/projects/${projectId}/comments`,
+        `https://taskify-backend-btvr.onrender.com/comments`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -106,10 +106,7 @@ const ProjectList = () => {
         throw new Error('Failed to fetch comments');
       }
       const data = await response.json();
-      setComments((prevState) => ({
-        ...prevState,
-        [projectId]: data,
-      }));
+      setComments(data);
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
@@ -126,14 +123,14 @@ const ProjectList = () => {
     setCommentInput(e.target.value);
   };
 
-  const handleCommentSubmit = (projectId) => {
-    fetch(`https://taskify-backend-btvr.onrender.com/projects/${projectId}/comments`, {
+  const handleCommentSubmit = (projectId, taskId, commentInput ) => {
+    fetch(`https://taskify-backend-btvr.onrender.com/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       },
-      body: JSON.stringify({ comment: commentInput }),
+      body: JSON.stringify({ text: commentInput, project_id: projectId, task_id:taskId }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -142,10 +139,7 @@ const ProjectList = () => {
         return response.json();
       })
       .then((data) => {
-        setComments((prevState) => ({
-          ...prevState,
-          [projectId]: [...(prevState[projectId] || []), data],
-        }));
+        setComments((prev_comments)=> [...prev_comments, data]);
         setCommentInput('');
       })
       .catch((error) => {
@@ -153,18 +147,16 @@ const ProjectList = () => {
       });
   };
 
-  const handleDeleteComment = (projectId, commentId) => {
-    fetch(`https://taskify-backend-btvr.onrender.com/projects/${projectId}/comments/${commentId}`, {
+  const handleDeleteComment = (commentId) => {
+    fetch(`https://taskify-backend-btvr.onrender.com/comments/${commentId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       },
     })
       .then(() => {
-        setComments((prevState) => ({
-          ...prevState,
-          [projectId]: prevState[projectId].filter((comment) => comment.id !== commentId),
-        }));
+        const updated_comments= comments.filter((comment) => comment.id !== commentId)
+        setComments(updated_comments);
       })
       .catch((error) => {
         console.error('Error deleting comment:', error);
@@ -204,24 +196,9 @@ const ProjectList = () => {
               <p className='text-gray-700'>End Date: {project.end_date}</p>
               <h4 className='text-lg font-semibold text-cyan-800'>Tasks:</h4>
               <ul className='list-disc list-inside text-gray-700'>
-                {project.tasks && project.tasks.map(task => (
-                  <li key={task.id}>{task.name}</li>
-                ))}
-              </ul>
-              <h4 className='text-lg font-semibold text-cyan-800 mt-4'>Comments:</h4>
-              {comments[project.id] &&
-                comments[project.id].map((comment) => (
-                  <div key={comment.id} className='mb-2'>
-                    <p className='text-gray-700'>{comment.comment}</p>
-                    <button
-                      className='text-red-500 hover:text-red-700'
-                      onClick={() => handleDeleteComment(project.id, comment.id)}
-                    >
-                      Delete Comment
-                    </button>
-                  </div>
-                ))}
-              <div className='flex mt-2'>
+                {tasksOptions.map(task => (
+                  <li key={task.id}>{task.title}
+                  <div className='flex mt-2'>
                 <input
                   type='text'
                   value={commentInput}
@@ -230,12 +207,28 @@ const ProjectList = () => {
                   className='border border-cyan-500 rounded p-2 w-full'
                 />
                 <button
-                  onClick={() => handleCommentSubmit(project.id)}
+                  onClick={() => handleCommentSubmit(project.id, task.id, commentInput)}
                   className='bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2'
                 >
                   Submit
                 </button>
               </div>
+                  </li>
+                ))}
+              </ul>
+              <h4 className='text-lg font-semibold text-cyan-800 mt-4'>Comments:</h4>
+              {comments.map((comment) => (
+                  <div key={comment.id} className='mb-2'>
+                    <p className='text-gray-700'>{comment.text}</p>
+                    <button
+                      className='text-red-500 hover:text-red-700'
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      Delete Comment
+                    </button>
+                  </div>
+                ))}
+              
               <button
                 onClick={() => handleDeleteProject(project.id)}
                 className='bg-red-500 text-white font-semibold px-4 py-2 rounded mt-2'
