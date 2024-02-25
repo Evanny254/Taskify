@@ -4,6 +4,7 @@ import { Formik, Form, Field } from "formik";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
+  const [comms, setComms] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [comments, setComments] = useState({});
   const [editedTask, setEditedTask] = useState(null);
@@ -49,33 +50,9 @@ const TaskList = () => {
       .then((data) => {
         console.log("Comms data", taskId, data);
         setComms(data);
+        console.log(comms);
       })
       .catch((error) => console.error("Fetch error:", error));
-  };
-
-  const fetchComments = async (accessToken, taskId) => {
-    try {
-      const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/comments/${taskId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-      const data = await response.json();
-      console.log("Fetched comments for task:", taskId, data);
-      setComments((prevState) => ({
-        ...prevState,
-        [taskId]: data,
-      }));
-      console.log(comments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
   };
 
   const handleTaskClick = (taskId) => {
@@ -93,14 +70,18 @@ const TaskList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://taskify-backend-btvr.onrender.com/tasks/comments/${taskId}`,
+        `https://taskify-backend-btvr.onrender.com/comments`,
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ comment }),
+          body: JSON.stringify({
+            text: comment,
+            project_id: null,
+            task_id: taskId,
+          }),
         }
       );
       if (!response.ok) {
