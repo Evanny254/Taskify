@@ -143,6 +143,7 @@ const TaskList = () => {
   const handleUpdateTask = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
+      console.log(editedTask);
       const response = await fetch(
         `https://taskify-backend-btvr.onrender.com/tasks/${editedTask.id}`,
         {
@@ -286,7 +287,122 @@ const TaskList = () => {
                               className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                             />
                           </div>
-                          {/* Other form fields */}
+                          <div className="mb-4">
+                            <label
+                              htmlFor="description"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Description
+                            </label>
+                            <Field
+                              as="textarea"
+                              id="description"
+                              name="description"
+                              rows="3"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="category"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Category
+                            </label>
+                            <Field
+                              type="text"
+                              id="category"
+                              name="category"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="due_date"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Due Date
+                            </label>
+                            <Field
+                              type="text" // You might want to change this to a date input if applicable
+                              id="due_date"
+                              name="due_date"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="priority"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Priority
+                            </label>
+                            <Field
+                              as="select"
+                              id="priority"
+                              name="priority"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            >
+                              <option value="">Select Priority</option>
+                              <option value="High">High</option>
+                              <option value="Medium">Medium</option>
+                              <option value="Low">Low</option>
+                            </Field>
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="status"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Status
+                            </label>
+                            <Field
+                              as="select"
+                              id="status"
+                              name="status"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            >
+                              <option value="">Select Status</option>
+                              <option value="Done">Done</option>
+                              <option value="Pending">Pending</option>
+                              <option value="In Progress">In Progress</option>
+                            </Field>
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="reminder_date"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Reminder Date
+                            </label>
+                            <Field
+                              type="text" // You might want to change this to a date input if applicable
+                              id="reminder_date"
+                              name="reminder_date"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            />
+                          </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="recurrence_pattern"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Recurrence Pattern
+                            </label>
+                            <Field
+                              as="select"
+                              id="recurrence_pattern"
+                              name="recurrence_pattern"
+                              className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
+                            >
+                              <option value="">
+                                Select Recurrence Pattern
+                              </option>
+                              <option value="Weekly">Weekly</option>
+                              <option value="Monthly">Monthly</option>
+                              <option value="Daily">Daily</option>
+                            </Field>
+                          </div>
                           <div className="flex justify-end">
                             <button
                               type="submit"
