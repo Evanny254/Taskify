@@ -122,14 +122,18 @@ const ProjectList = () => {
     setCommentInput(e.target.value);
   };
 
-  const handleCommentSubmit = (projectId, taskId, commentInput) => {
+  const handleCommentSubmit = (projectId, commentInput) => {
     fetch(`http://127.0.0.1:5000/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
       },
-      body: JSON.stringify({ text: commentInput, project_id: projectId, task_id: taskId }),
+      body: JSON.stringify({ 
+        text: commentInput,
+         project_id: projectId,
+        task_id : null
+        }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -209,6 +213,27 @@ const ProjectList = () => {
                   </button>
                 </div>
               ))}
+              <Formik
+                initialValues={{ comment: "" }}
+                onSubmit={(values, { resetForm }) => {
+                  handleCommentSubmit(project.id, values.comment);
+                  resetForm();
+                }}
+              >
+                <Form className="flex mt-2">
+                  <Field
+                    type="text"
+                    name="comment"
+                    className="border border-cyan-500 rounded p-2 w-full"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2"
+                  >
+                    Add Comment
+                  </button>
+                </Form>
+              </Formik>
 
               <button
                 onClick={() => handleDeleteProject(project.id)}
