@@ -29,7 +29,7 @@ const TaskList = () => {
       }
     };
     fetchProjects();
-  
+
     const accessToken = localStorage.getItem("access_token");
     fetchTasks(accessToken);
   }, []);
@@ -51,20 +51,23 @@ const TaskList = () => {
     }
   };
 
-  const fetchComments = async (accessToken, taskId) => {
+  const fetchComments = async (taskId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/comments/${taskId}`, {
+      const accessToken = localStorage.getItem("access_token");
+      console.log("Selected task Id is:", taskId);
+      const response = await fetch(`http://127.0.0.1:5000/comments`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error("Failed to fetch comments");
       }
       const data = await response.json();
       setComments(data);
+      console.log(comments);
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.error("Error fetching comments:", error);
     }
   };
 
@@ -167,7 +170,7 @@ const TaskList = () => {
             status: editedTask.status,
             recurrence_pattern: editedTask.ecurrence_pattern,
             priority: editedTask.priority,
-            project_id: editedTask.project_id
+            project_id: editedTask.project_id,
           }),
         }
       );
@@ -193,10 +196,13 @@ const TaskList = () => {
   };
 
   return (
-    <div className='container mx-auto mt-10 px-4'>
+    <div className="container mx-auto mt-10 px-4">
       <h2 className="text-3xl font-semibold text-cyan-800 mb-6">Task List</h2>
       {tasks.map((task) => (
-        <div key={task.id} className="border border-cyan-500 rounded-lg p-4 mb-6">
+        <div
+          key={task.id}
+          className="border border-cyan-500 rounded-lg p-4 mb-6"
+        >
           <h3
             onClick={() => handleTaskClick(task.id)}
             className="text-xl font-semibold text-cyan-800 cursor-pointer"
@@ -207,13 +213,21 @@ const TaskList = () => {
             <div className="mt-4">
               <p className="text-gray-700">Description: {task.description}</p>
               <p className="text-gray-700">Category: {task.category}</p>
-              <p className="text-gray-700">Due Date: {formatDate(task.due_date)}</p>
+              <p className="text-gray-700">
+                Due Date: {formatDate(task.due_date)}
+              </p>
               <p className="text-gray-700">Priority: {task.priority}</p>
               <p className="text-gray-700">Status: {task.status}</p>
-              <p className="text-gray-700">Reminder Date: {formatDate(task.reminder_date)}</p>
-              <p className="text-gray-700">Recurrence Pattern: {task.recurrence_pattern}</p>
+              <p className="text-gray-700">
+                Reminder Date: {formatDate(task.reminder_date)}
+              </p>
+              <p className="text-gray-700">
+                Recurrence Pattern: {task.recurrence_pattern}
+              </p>
               <p className="text-gray-700">Project: {task.project_id}</p>
-              <h4 className="text-lg font-semibold text-cyan-800 mt-4">Comments:</h4>
+              <h4 className="text-lg font-semibold text-cyan-800 mt-4">
+                Comments:
+              </h4>
               {comments[task.id] &&
                 Array.isArray(comments[task.id]) &&
                 comments[task.id].map((comment) => (
@@ -262,7 +276,9 @@ const TaskList = () => {
               </button>
               {editedTask && editedTask.id === task.id && (
                 <div className="mt-4">
-                  <h3 className="text-lg font-semibold mb-2">Edit Task Details</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Edit Task Details
+                  </h3>
                   <Formik
                     initialValues={editedTask}
                     enableReinitialize
@@ -273,68 +289,105 @@ const TaskList = () => {
                   >
                     <Form>
                       <div className="mb-4">
-                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="title"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Title
                         </label>
                         <Field
                           type="text"
                           id="title"
                           name="title"
-                          value={editedTask.title} 
-                          onChange={(event) => setEditedTask({ ...editedTask, title: event.target.value })}
+                          value={editedTask.title}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              title: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="description"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Description
                         </label>
                         <Field
                           as="textarea"
                           id="description"
                           name="description"
-                          value={editedTask.description} 
-                          onChange={(event) => setEditedTask({ ...editedTask, description: event.target.value })}
+                          value={editedTask.description}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              description: event.target.value,
+                            })
+                          }
                           rows="3"
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="category"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Category
                         </label>
                         <Field
                           type="text"
                           id="category"
                           name="category"
-                          value={editedTask.category} 
-                          onChange={(event) => setEditedTask({ ...editedTask, category: event.target.value })}
+                          value={editedTask.category}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              category: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="due_date" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="due_date"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Due Date
                         </label>
                         <DatePicker
                           id="due_date"
                           name="due_date"
                           selected={new Date(editedTask.due_date)}
-                          onChange={(date) => setEditedTask({ ...editedTask, due_date: date })}
+                          onChange={(date) =>
+                            setEditedTask({ ...editedTask, due_date: date })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                           dateFormat="yyyy-MM-dd"
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="priority" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="priority"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Priority
                         </label>
                         <Field
                           as="select"
                           id="priority"
                           name="priority"
-                          value={editedTask.priority} 
-                          onChange={(event) => setEditedTask({ ...editedTask, priority: event.target.value })}
+                          value={editedTask.priority}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              priority: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         >
                           <option value="">Select Priority</option>
@@ -344,15 +397,23 @@ const TaskList = () => {
                         </Field>
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="status"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Status
                         </label>
                         <Field
                           as="select"
                           id="status"
                           name="status"
-                          value={editedTask.status} 
-                          onChange={(event) => setEditedTask({ ...editedTask, status: event.target.value })}
+                          value={editedTask.status}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              status: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         >
                           <option value="">Select Status</option>
@@ -362,28 +423,44 @@ const TaskList = () => {
                         </Field>
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="reminder_date" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="reminder_date"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Reminder Date
                         </label>
                         <DatePicker
                           id="reminder_date"
                           name="reminder_date"
                           selected={new Date(editedTask.reminder_date)}
-                          onChange={(date) => setEditedTask({ ...editedTask, reminder_date: date })}
+                          onChange={(date) =>
+                            setEditedTask({
+                              ...editedTask,
+                              reminder_date: date,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                           dateFormat="yyyy-MM-dd"
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="recurrence_pattern" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="recurrence_pattern"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Recurrence Pattern
                         </label>
                         <Field
                           as="select"
                           id="recurrence_pattern"
                           name="recurrence_pattern"
-                          value={editedTask.recurrence_pattern} 
-                          onChange={(event) => setEditedTask({ ...editedTask, recurrence_pattern: event.target.value })}
+                          value={editedTask.recurrence_pattern}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              recurrence_pattern: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         >
                           <option value="">Select Recurrence Pattern</option>
@@ -393,24 +470,32 @@ const TaskList = () => {
                         </Field>
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="project_id" className="block text-sm font-medium text-gray-700">
+                        <label
+                          htmlFor="project_id"
+                          className="block text-sm font-medium text-gray-700"
+                        >
                           Project
                         </label>
                         <Field
                           as="select"
                           id="project_id"
                           name="project_id"
-                          value={editedTask.project_id || ''} 
-                          onChange={(event) => setEditedTask({ ...editedTask, project_id: event.target.value })}
+                          value={editedTask.project_id || ""}
+                          onChange={(event) =>
+                            setEditedTask({
+                              ...editedTask,
+                              project_id: event.target.value,
+                            })
+                          }
                           className="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500"
                         >
-                           <option value="">Select Project</option>
-                           {projects.map((project) => (
-                           <option key={project.id} value={project.id}>
-                            {project.name}
+                          <option value="">Select Project</option>
+                          {projects.map((project) => (
+                            <option key={project.id} value={project.id}>
+                              {project.name}
                             </option>
-                            ))}
-                            <option value={undefined}>None</option>
+                          ))}
+                          <option value={undefined}>None</option>
                         </Field>
                       </div>
                       <div className="flex justify-end">
