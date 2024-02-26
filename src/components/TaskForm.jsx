@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -11,10 +11,35 @@ const TaskForm = () => {
     priority: "",
     status: "",
     reminder_date: null,
-    recurrence_pattern: ""
+    recurrence_pattern: "",
+    project_id: null
   };
 
   const [formData, setFormData] = useState({ ...initialFormData });
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    // Fetch projects data
+    const fetchProjects = async () => {
+      try {
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch("http://127.0.0.1:5000/projects", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch projects");
+        }
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,18 +52,33 @@ const TaskForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Format dates to YYYY-MM-DD
+    const formatDate = (date) => {
+      if (!date) return null;
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() +  1).padStart(2, '0'); // Months are  0-indexed in JavaScript
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    const formattedDueDate = formatDate(formData.due_date);
+    const formattedReminderDate = formatDate(formData.reminder_date);
+
     const taskData = {
       title: formData.title,
       description: formData.description,
       category: formData.category,
-      due_date: formData.due_date instanceof Date ? formData.due_date.toISOString() : null,
+      due_date: formattedDueDate, // Use formatted date
       priority: formData.priority,
       status: formData.status,
-      reminder_date: formData.reminder_date instanceof Date ? formData.reminder_date.toISOString() : null,
-      recurrence_pattern: formData.recurrence_pattern instanceof Date ? formData.recurrence_pattern.toISOString() : null
+      reminder_date: formattedReminderDate, // Use formatted date
+      recurrence_pattern: formData.recurrence_pattern,
+      project_id : formData.project_id
     };
     const accessToken = localStorage.getItem('access_token');
-    fetch("https://taskify-backend-btvr.onrender.com/tasks", {
+    console.log(taskData)
+    fetch("http://127.0.0.1:5000/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,9 +87,9 @@ const TaskForm = () => {
       body: JSON.stringify(taskData),
     })
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status ===  201) {
           console.log("Task created successfully.");
-          setFormData({ ...initialFormData }); 
+          setFormData({ ...initialFormData });  
         } else {
           console.error("Task creation failed.");
         }
@@ -58,6 +98,8 @@ const TaskForm = () => {
         console.error("Error:", error);
       });
   };
+
+  // Render method and return statement here
 
   return (
     <div className="bg-cyan-50 min-h-screen flex justify-center items-center">
@@ -164,6 +206,23 @@ const TaskForm = () => {
     <option value="Monthly">Monthly</option>
     <option value="Daily">Daily</option>
   </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-cyan-700 font-medium mb-2">Project:</label>
+              <select
+                name="project_id"
+                value={formData.project_id || ''}
+                onChange={handleChange}
+                className="block w-full border border-cyan-300 rounded-md py-2 px-3 focus:outline-none focus:border-cyan-500"
+              >
+                <option value="">Select Project</option>
+                {projects.map((project) => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+                <option value={undefined}>None</option>
+              </select>
             </div>
             <button
               type="submit"

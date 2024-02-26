@@ -6,7 +6,7 @@ const AccountDetails = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token'); 
-    fetch('https://taskify-backend-btvr.onrender.com/user', {
+    fetch('http://127.0.0.1:5000/user', {
       headers: {
         'Authorization': `Bearer ${accessToken}`  
       }
