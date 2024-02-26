@@ -16,7 +16,7 @@ const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [commentInput, setCommentInput] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState({});
   const [editedProject, setEditedProject] = useState(null);
 
   useEffect(() => {

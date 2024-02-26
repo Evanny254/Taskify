@@ -55,7 +55,7 @@ const TaskList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       console.log("Selected task Id is:", taskId);
-      const response = await fetch(`http://127.0.0.1:5000/comments`, {
+      const response = await fetch(`http://127.0.0.1:5000/comments/${taskId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -64,8 +64,8 @@ const TaskList = () => {
         throw new Error("Failed to fetch comments");
       }
       const data = await response.json();
-      setComments(data);
-      console.log(comments);
+      setComments(data.comments);
+      console.log(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -77,7 +77,7 @@ const TaskList = () => {
     } else {
       setSelectedTask(taskId);
       const accessToken = localStorage.getItem("access_token");
-      fetchComments(accessToken, taskId);
+      fetchComments(taskId);
     }
   };
 
@@ -228,14 +228,13 @@ const TaskList = () => {
               <h4 className="text-lg font-semibold text-cyan-800 mt-4">
                 Comments:
               </h4>
-              {comments[task.id] &&
-                Array.isArray(comments[task.id]) &&
-                comments[task.id].map((comment) => (
+              {Array.isArray(comments) &&
+                comments.map((comment) => (
                   <div key={comment.id} className="mb-2">
-                    <p className="text-gray-700">{comment.comment}</p>
+                    <p className="text-gray-700">{comment.text}</p>
                     <button
-                      onClick={() => handleDeleteComment(task.id, comment.id)}
                       className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteComment(task.id, comment.id)}
                     >
                       Delete Comment
                     </button>
