@@ -37,7 +37,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Footer className="flex-shrink-0" /> {/* Include the Footer component with flex-shrink-0 */}
+      <Footer className="flex-shrink-0" />
     </div>
   );
 };
