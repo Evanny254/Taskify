@@ -197,10 +197,6 @@ const ProjectList = () => {
               <p className="text-gray-700">Description: {project.description}</p>
               <p className="text-gray-700">Start Date: {formatDate(project.start_date)}</p>
               <p className="text-gray-700">End Date: {formatDate(project.end_date)}</p>
-              <h4 className="text-lg font-semibold text-cyan-800">Tasks:</h4>
-              <ul className="list-disc list-inside text-gray-700">
-                {/* Removed tasksOptions.map */}
-              </ul>
               <h4 className="text-lg font-semibold text-cyan-800 mt-4">Comments:</h4>
               {comments.map((comment) => (
                 <div key={comment.id} className="mb-2">
