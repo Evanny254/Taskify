@@ -90,11 +90,14 @@ const ProjectList = () => {
   const fetchComments = async (projectId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`http://127.0.0.1:5000/comments`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `http://127.0.0.1:5000/comments/${projectId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
