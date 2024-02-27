@@ -16,7 +16,7 @@ const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [commentInput, setCommentInput] = useState("");
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [editedProject, setEditedProject] = useState(null);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ const ProjectList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://127.0.0.1:5000/comments/${projectId}`,
+        `http://127.0.0.1:5000/projectcomments/${projectId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -102,7 +102,7 @@ const ProjectList = () => {
         throw new Error("Failed to fetch comments");
       }
       const data = await response.json();
-      setComments(data);
+      setComments(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
