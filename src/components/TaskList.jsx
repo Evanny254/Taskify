@@ -54,7 +54,6 @@ const TaskList = () => {
   const fetchComments = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      console.log("Selected task Id is:", taskId);
       const response = await fetch(`http://127.0.0.1:5000/comments/${taskId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -65,7 +64,6 @@ const TaskList = () => {
       }
       const data = await response.json();
       setComments(data.comments);
-      console.log(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -100,16 +98,13 @@ const TaskList = () => {
         throw new Error("Failed to submit comment");
       }
       const data = await response.json();
-      setComments((prevState) => ({
-        ...prevState,
-        [taskId]: [...(prevState[taskId] || []), data],
-      }));
+      setComments((prevState) => [...prevState, data]); // Append new comment to the existing comments array
     } catch (error) {
       console.error("Error submitting comment:", error);
     }
   };
 
-  const handleDeleteComment = async (taskId, commentId) => {
+  const handleDeleteComment = async (commentId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
       await fetch(`http://127.0.0.1:5000/comments/${commentId}`, {
@@ -118,12 +113,10 @@ const TaskList = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setComments((prevState) => ({
-        ...prevState,
-        [taskId]: (prevState[taskId] || []).filter(
-          (comment) => comment.id !== commentId
-        ),
-      }));
+      // Filter out the deleted comment from the comments array
+      setComments((prevState) =>
+        prevState.filter((comment) => comment.id !== commentId)
+      );
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -234,7 +227,7 @@ const TaskList = () => {
                     <p className="text-gray-700">{comment.text}</p>
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => handleDeleteComment(task.id, comment.id)}
+                      onClick={() => handleDeleteComment(comment.id)}
                     >
                       Delete Comment
                     </button>
