@@ -16,7 +16,7 @@ Technologies Used
 ## Frontend
 React: A JavaScript library for building user interfaces, providing a fast and interactive frontend experience.
 JavaScript (ES6+): The latest version of JavaScript enhances Taskify's frontend functionality and interactivity.
-HTML & CSS: Standard web technologies used for structuring and styling the application's user interface.
+HTML & Tailwind CSS: Standard web technologies used for structuring and styling the application's user interface.
 ## Backend
 Flask: A lightweight and flexible Python web framework used to develop the backend API for Taskify.
 Python: The backend logic and API endpoints are written in Python, offering a clean and efficient development environment.
