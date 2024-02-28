@@ -13,8 +13,10 @@ import AccountDetails from './components/AccountDetails';
 import About from './components/About';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import Layout from './components/Layout';
+import TaskReport from './components/TaskReport';
 
 import './App.css';
+
 
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
         <Route path="/projectlist" element={<ProjectList />} />
         <Route path="/projectform" element={<ProjectForm />} />
         <Route path="/account" element={<AccountDetails />} />
+        <Route path="/taskreport" element={<TaskReport />} />
         <Route path="/signout" element={<SignOut />} />
         </Route>
         </Route>
