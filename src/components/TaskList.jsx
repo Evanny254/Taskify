@@ -17,7 +17,7 @@ const TaskList = () => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("http://127.0.0.1:5000/projects", {
+        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -39,7 +39,7 @@ const TaskList = () => {
 
   const fetchTasks = async (accessToken) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/tasks", {
+      const response = await fetch("https://taskify-backend-5v37.onrender.com/tasks", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -57,7 +57,7 @@ const TaskList = () => {
   const fetchComments = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`http://127.0.0.1:5000/comments/${taskId}`, {
+      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments/${taskId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -85,7 +85,7 @@ const TaskList = () => {
   const handleCommentSubmit = async (taskId, comment) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`http://127.0.0.1:5000/comments`, {
+      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -110,7 +110,7 @@ const TaskList = () => {
   const handleDeleteComment = async (commentId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      await fetch(`http://127.0.0.1:5000/comments/${commentId}`, {
+      await fetch(`https://taskify-backend-5v37.onrender.com/comments/${commentId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -128,7 +128,7 @@ const TaskList = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      await fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+      await fetch(`https://taskify-backend-5v37.onrender.com/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -149,7 +149,7 @@ const TaskList = () => {
       const accessToken = localStorage.getItem("access_token");
       console.log("Data to be submitted:", editedTask);
       const response = await fetch(
-        `http://127.0.0.1:5000/tasks/${editedTask.id}`,
+        `https://taskify-backend-5v37.onrender.com/tasks/${editedTask.id}`,
         {
           method: "PUT",
           headers: {

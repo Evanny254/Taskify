@@ -26,7 +26,7 @@ const ProjectList = () => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("http://127.0.0.1:5000/projects", {
+        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -52,7 +52,7 @@ const ProjectList = () => {
       const accessToken = localStorage.getItem("access_token");
       console.log("Data to be submitted:", editedProject);
       const response = await fetch(
-        `http://127.0.0.1:5000/projects/${editedProject.id}`,
+        `https://taskify-backend-5v37.onrender.com/projects/${editedProject.id}`,
         {
           method: "PUT",
           headers: {
@@ -94,7 +94,7 @@ const ProjectList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://127.0.0.1:5000/projectcomments/${projectId}`,
+        `https://taskify-backend-5v37.onrender.com/projectcomments/${projectId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -123,7 +123,7 @@ const ProjectList = () => {
   };
 
   const handleCommentSubmit = (projectId, commentInput) => {
-    fetch(`http://127.0.0.1:5000/comments`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -151,7 +151,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteComment = (commentId) => {
-    fetch(`http://127.0.0.1:5000/comments/${commentId}`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/comments/${commentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -169,7 +169,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteProject = (projectId) => {
-    fetch(`http://127.0.0.1:5000/projects/${projectId}`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/projects/${projectId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

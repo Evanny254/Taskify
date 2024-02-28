@@ -16,7 +16,7 @@ function SignUp() {
   const handleSignUp = async(e)=> {
     e.preventDefault()
     try {
-      const response = await fetch('http://127.0.0.1:5000/register', {
+      const response = await fetch('https://taskify-backend-5v37.onrender.com/register', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

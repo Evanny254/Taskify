@@ -22,7 +22,7 @@ const TaskForm = () => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("http://127.0.0.1:5000/projects", {
+        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -77,7 +77,7 @@ const TaskForm = () => {
 
     try {
       const accessToken = localStorage.getItem('access_token');
-      const response = await fetch("http://127.0.0.1:5000/tasks", {
+      const response = await fetch("https://taskify-backend-5v37.onrender.com/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -13,7 +13,7 @@ const AccountDetails = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
-    fetch("http://127.0.0.1:5000/user", {
+    fetch("https://taskify-backend-5v37.onrender.com/user", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -51,7 +51,7 @@ const AccountDetails = () => {
 
   const handleSave = () => {
     const accessToken = localStorage.getItem("access_token");
-    fetch("http://127.0.0.1:5000/user", {
+    fetch("https://taskify-backend-5v37.onrender.com/user", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -74,6 +74,7 @@ const AccountDetails = () => {
       .catch((error) => {
         console.error("Error updating user details:", error);
       });
+      alert("Details Updated Successfully")
     navigate("/home");
   };
 

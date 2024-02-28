@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaTasks } from 'react-icons/fa';
-import Footer from './Footer'; 
 
 const Home = () => {
   return (
@@ -37,7 +36,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Footer className="flex-shrink-0" />
     </div>
   );
 };
