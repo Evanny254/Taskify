@@ -19,7 +19,6 @@ const TaskForm = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    // Fetch projects data
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
@@ -49,15 +48,14 @@ const TaskForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Format dates to YYYY-MM-DD
     const formatDate = (date) => {
       if (!date) return null;
       const d = new Date(date);
       const year = d.getFullYear();
-      const month = String(d.getMonth() +  1).padStart(2, '0'); // Months are  0-indexed in JavaScript
+      const month = String(d.getMonth() +  1).padStart(2, '0');
       const day = String(d.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     };
@@ -69,40 +67,37 @@ const TaskForm = () => {
       title: formData.title,
       description: formData.description,
       category: formData.category,
-      due_date: formattedDueDate, // Use formatted date
+      due_date: formattedDueDate,
       priority: formData.priority,
       status: formData.status,
-      reminder_date: formattedReminderDate, // Use formatted date
+      reminder_date: formattedReminderDate,
       recurrence_pattern: formData.recurrence_pattern,
       project_id : formData.project_id
     };
-    const accessToken = localStorage.getItem('access_token');
-    console.log(taskData)
-    fetch("http://127.0.0.1:5000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(taskData),
-    })
-      .then((response) => {
-        if (response.status ===  201) {
-          console.log("Task created successfully.");
-          setFormData({ ...initialFormData });  
-        } else {
-          console.error("Task creation failed.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      const response = await fetch("http://127.0.0.1:5000/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(taskData),
       });
+      
+      if (response.status === 201) {
+        setFormData({ ...initialFormData });
+      } else {
+        console.error("Task creation failed.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  // Render method and return statement here
-
   return (
-    <div className="bg-cyan-50 min-h-screen flex justify-center items-center">
+    <div className="bg-cyan-100 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-md">
         <div className="bg-white rounded shadow-md p-8">
           <h2 className="text-2xl mb-4 font-semibold text-cyan-800">Create a Task</h2>
@@ -227,7 +222,7 @@ const TaskForm = () => {
             <button
               type="submit"
               className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={() => alert("Task Submitted Successfully")}
+              onClick={() => alert("Task Created Successfully")}
             >
               Create Task
             </button>

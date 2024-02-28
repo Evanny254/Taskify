@@ -91,6 +91,7 @@ function SignUp() {
           <button
             type='submit'
             className='bg-cyan-500 text-white font-semibold py-4 w-1/2 mx-auto rounded-lg'
+            onClick={() => alert("User Registered Successfully")}
           >
             Sign Up
           </button>

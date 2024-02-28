@@ -120,6 +120,7 @@ const ProjectForm = () => {
           <button
             className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
+            onClick={() => alert("Project Created Successfully")}
           >
             Create Project
           </button>
