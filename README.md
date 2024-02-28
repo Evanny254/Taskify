@@ -35,6 +35,10 @@ TaskForm: Form component for creating and updating tasks.
 ProjectForm: Form component for creating and updating projects.
 AccountDetails: Component for viewing and updating user account details.
 AuthHandler: Component for managing user authentication.
+
+## Technologies Used
+Frontend: React (Javascript), Redux, React Router, Fetch API, and Tailwind CSS for sleek and responsive styling.
+Backend: Flask (Python) and PostgreSQL, Taskify ensures reliability and scalability in data management and retrieval, laying a sturdy foundation for seamless operation.
 ## Usage
 
 To get started with Taskify, simply sign up or log in to your account. Once logged in, you can create tasks, organize them into projects, and manage your account settings. Taskify's intuitive interface makes task management a breeze, allowing you to focus on what matters most - your work.
