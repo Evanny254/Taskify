@@ -4,13 +4,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
 
-import { LuLock, LuMail } from 'react-icons/lu';
-
+import { LuLock, LuMail } from "react-icons/lu";
 
 const SignIn = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -27,16 +26,24 @@ const SignIn = () => {
       );
 
       const { access_token, refresh_token } = response.data;
-  
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-  
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-  
-      navigate('/home');
+
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+
+      // Show success message in alert
+      window.alert("Sign In Successful");
+      navigate("/home");
     } catch (error) {
-      console.error('Login error:', error);
-      
+      console.error("Login error:", error);
+      if (error.response && error.response.status === 401) {
+        setErrorMessage("Invalid username or password.");
+      } else {
+        setErrorMessage(
+          "An error occurred while signing in. Please try again later."
+        );
+      }
     }
   };
 
@@ -50,17 +57,23 @@ const SignIn = () => {
         </h1>
       </div>
       {/* Login Form */}
-      <div className='w-2/5 mx-auto shadowy border border-brown-100 p-8 rounded-md overflow-hidden'>
-        <h2 className='text-3xl text-center font-semibold font-display'>Sign In</h2>
-        <form onSubmit={handleSignIn} className='grid gap-8 mt-8'>
-
+      <div className="w-2/5 mx-auto shadowy border border-brown-100 p-8 rounded-md overflow-hidden">
+        <h2 className="text-3xl text-center font-semibold font-display">
+          Sign In
+        </h2>
+        <form onSubmit={handleSignIn} className="grid gap-8 mt-8">
+          {errorMessage && (
+            <span className="text-red-500 block text-center">
+              {errorMessage}
+            </span>
+          )}
           {/*username */}
           <div className="flex gap-2 items-center border-b border-gray-300 ">
             <LuMail size={25} className="text-gray-400" />
             <input
-              type='text'
-              className='text-lg focus:outline-none py-1 placeholder:capitalize'
-              placeholder='Username'
+              type="text"
+              className="text-lg focus:outline-none py-1 placeholder:capitalize"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -90,7 +103,6 @@ const SignIn = () => {
           <button
             type="submit"
             className="bg-cyan-500 text-white font-semibold py-4 w-1/2 mx-auto rounded-lg"
-            onClick={() => alert("Sign In Successfully")}
           >
             SignIn
           </button>
@@ -107,4 +119,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-

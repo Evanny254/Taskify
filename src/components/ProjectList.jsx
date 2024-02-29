@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const formatDate = (date) => {
   if (!date) return null;
   const d = new Date(date);
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed in JavaScript
+  const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
@@ -21,16 +20,20 @@ const ProjectList = () => {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState([]);
   const [editedProject, setEditedProject] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          "https://taskify-backend-5v37.onrender.com/projects",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
@@ -77,17 +80,17 @@ const ProjectList = () => {
         )
       );
       setEditedProject(null);
+      setErrorMessage({
+        message: "Project updated successfully",
+        type: "success",
+      });
     } catch (error) {
       console.error("Error updating project:", error);
+      setErrorMessage({
+        message: "Failed to update project. Please try again later.",
+        type: "error",
+      });
     }
-  };
-  const formatDate = (date) => {
-    if (!date) return null;
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   };
 
   const fetchComments = async (projectId) => {
@@ -145,9 +148,17 @@ const ProjectList = () => {
       .then((data) => {
         setComments((prev_comments) => [...prev_comments, data]);
         setCommentInput("");
+        setErrorMessage({
+          message: "Comment added successfully",
+          type: "success",
+        });
       })
       .catch((error) => {
         console.error("Error submitting comment:", error);
+        setErrorMessage({
+          message: "Failed to add comment. Please try again later.",
+          type: "error",
+        });
       });
   };
 
@@ -163,9 +174,17 @@ const ProjectList = () => {
           (comment) => comment.id !== commentId
         );
         setComments(updated_comments);
+        setErrorMessage({
+          message: "Comment deleted successfully",
+          type: "success",
+        });
       })
       .catch((error) => {
         console.error("Error deleting comment:", error);
+        setErrorMessage({
+          message: "Failed to delete comment. Please try again later.",
+          type: "error",
+        });
       });
   };
 
@@ -180,9 +199,17 @@ const ProjectList = () => {
         setProjects((prevProjects) =>
           prevProjects.filter((project) => project.id !== projectId)
         );
+        setErrorMessage({
+          message: "Project deleted successfully",
+          type: "success",
+        });
       })
       .catch((error) => {
         console.error("Error deleting project:", error);
+        setErrorMessage({
+          message: "Failed to delete project. Please try again later.",
+          type: "error",
+        });
       });
   };
 
@@ -191,6 +218,16 @@ const ProjectList = () => {
       <h2 className="text-3xl font-semibold text-cyan-800 mb-6">
         Project List
       </h2>
+      {errorMessage && (
+        <div
+          className={
+            errorMessage.type === "success" ? "text-green-700" : "text-red-700"
+          }
+        >
+          {errorMessage.message}
+        </div>
+      )}
+
       {projects.map((project) => (
         <div
           key={project.id}
@@ -204,21 +241,28 @@ const ProjectList = () => {
           </h3>
           {selectedProject === project.id && (
             <div className="mt-4">
-              <p className="text-gray-700">Description: {project.description}</p>
-              <p className="text-gray-700">Start Date: {formatDate(project.start_date)}</p>
-              <p className="text-gray-700">End Date: {formatDate(project.end_date)}</p>
-              <h4 className="text-lg font-semibold text-cyan-800 mt-4">Comments:</h4>
+              <p className="text-gray-700">
+                Description: {project.description}
+              </p>
+              <p className="text-gray-700">
+                Start Date: {formatDate(project.start_date)}
+              </p>
+              <p className="text-gray-700">
+                End Date: {formatDate(project.end_date)}
+              </p>
+              <h4 className="text-lg font-semibold text-cyan-800 mt-4">
+                Comments:
+              </h4>
 
               {comments.map((comment) => (
                 <div key={comment.id} className="mb-2">
                   <p className="text-gray-700">{comment.text}</p>
                   <button
-  className="text-red-500 hover:text-red-700 focus:outline-none"
-  onClick={() => handleDeleteComment(comment.id)}
->
-  <FontAwesomeIcon icon={faTrash} />
-</button>
-
+                    className="text-red-500 hover:text-red-700 focus:outline-none"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
                 </div>
               ))}
               <Formik
@@ -229,20 +273,19 @@ const ProjectList = () => {
                 }}
               >
                 <Form className="flex mt-2 bg-gray-100 rounded-lg p-2">
-<Field
-    type="text"
-    name="comment"
-    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
-    placeholder="Add a comment..."
-  />
-  <button
-    type="submit"
-    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
-  >
-    Add Comment
-  </button>
-</Form>
-
+                  <Field
+                    type="text"
+                    name="comment"
+                    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
+                    placeholder="Add a comment..."
+                  />
+                  <button
+                    type="submit"
+                    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
+                  >
+                    Add Comment
+                  </button>
+                </Form>
               </Formik>
 
               <button
@@ -359,7 +402,6 @@ const ProjectList = () => {
                       <button
                         type="submit"
                         className="bg-cyan-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        onClick={() => alert("Project Updated Successfully")}
                       >
                         Save Changes
                       </button>

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -12,16 +11,21 @@ const TaskList = () => {
   const [comments, setComments] = useState([]);
   const [editedTask, setEditedTask] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await fetch(
+          "https://taskify-backend-5v37.onrender.com/projects",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }
@@ -29,6 +33,11 @@ const TaskList = () => {
         setProjects(data);
       } catch (error) {
         console.error("Error fetching projects:", error);
+        setErrorMessage("Failed to fetch projects");
+        // Set timer to clear error message after 5 seconds
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
       }
     };
     fetchProjects();
@@ -39,11 +48,14 @@ const TaskList = () => {
 
   const fetchTasks = async (accessToken) => {
     try {
-      const response = await fetch("https://taskify-backend-5v37.onrender.com/tasks", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        "https://taskify-backend-5v37.onrender.com/tasks",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch tasks");
       }
@@ -51,17 +63,25 @@ const TaskList = () => {
       setTasks(data);
     } catch (error) {
       console.error("Error fetching tasks:", error);
+      setErrorMessage("Failed to fetch tasks");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
   const fetchComments = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments/${taskId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `https://taskify-backend-5v37.onrender.com/comments/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
@@ -69,6 +89,11 @@ const TaskList = () => {
       setComments(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
+      setErrorMessage("Failed to fetch comments");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       setComments([]);
     }
   };
@@ -86,43 +111,69 @@ const TaskList = () => {
   const handleCommentSubmit = async (taskId, comment) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: comment,
-          project_id: null,
-          task_id: taskId,
-        }),
-      });
+      const response = await fetch(
+        `https://taskify-backend-5v37.onrender.com/comments`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: comment,
+            project_id: null,
+            task_id: taskId,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to submit comment");
       }
       const data = await response.json();
       setComments((prevState) => [...prevState, data]); // Append new comment to the existing comments array
+      setSuccessMessage("Comment added successfully");
+      // Set timer to clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
     } catch (error) {
       console.error("Error submitting comment:", error);
+      setErrorMessage("Failed to submit comment");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
   const handleDeleteComment = async (commentId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      await fetch(`https://taskify-backend-5v37.onrender.com/comments/${commentId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await fetch(
+        `https://taskify-backend-5v37.onrender.com/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       // Filter out the deleted comment from the comments array
       setComments((prevState) =>
         prevState.filter((comment) => comment.id !== commentId)
       );
+      setSuccessMessage("Comment deleted successfully");
+      // Set timer to clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
     } catch (error) {
       console.error("Error deleting comment:", error);
+      setErrorMessage("Failed to delete comment");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -136,8 +187,18 @@ const TaskList = () => {
         },
       });
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      setSuccessMessage("Task deleted successfully");
+      // Set timer to clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
     } catch (error) {
       console.error("Error deleting task:", error);
+      setErrorMessage("Failed to delete task");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -178,8 +239,18 @@ const TaskList = () => {
         prevTasks.map((task) => (task.id === editedTask.id ? editedTask : task))
       );
       setEditedTask(null);
+      setSuccessMessage("Task updated successfully");
+      // Set timer to clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
     } catch (error) {
       console.error("Error updating task:", error);
+      setErrorMessage("Failed to update task");
+      // Set timer to clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -195,6 +266,12 @@ const TaskList = () => {
   return (
     <div className="container mx-auto mt-10 px-4">
       <h2 className="text-3xl font-semibold text-cyan-800 mb-6">Task List</h2>
+      {/* Display error message */}
+      {errorMessage && <span className="text-red-500">{errorMessage}</span>}
+      {/* Display success message */}
+      {successMessage && (
+        <span className="text-green-500">{successMessage}</span>
+      )}
       {tasks.map((task) => (
         <div
           key={task.id}
@@ -230,12 +307,11 @@ const TaskList = () => {
                   <div key={comment.id} className="mb-2">
                     <p className="text-gray-700">{comment.text}</p>
                     <button
-  className="text-red-500 hover:text-red-700 focus:outline-none"
-  onClick={() => handleDeleteComment(comment.id)}
->
-  <FontAwesomeIcon icon={faTrash} />
-</button>
-
+                      className="text-red-500 hover:text-red-700 focus:outline-none"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </div>
                 ))}
               <Formik
@@ -246,20 +322,19 @@ const TaskList = () => {
                 }}
               >
                 <Form className="flex mt-2 bg-gray-100 rounded-lg p-2">
-  <Field
-    type="text"
-    name="comment"
-    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
-    placeholder="Add a comment..."
-  />
-  <button
-    type="submit"
-    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
-  >
-    Add Comment
-  </button>
-</Form>
-
+                  <Field
+                    type="text"
+                    name="comment"
+                    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
+                    placeholder="Add a comment..."
+                  />
+                  <button
+                    type="submit"
+                    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
+                  >
+                    Add Comment
+                  </button>
+                </Form>
               </Formik>
               <button
                 onClick={() => handleDeleteTask(task.id)}
@@ -501,7 +576,6 @@ const TaskList = () => {
                         <button
                           type="submit"
                           className="bg-cyan-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                          onClick={() => alert("Task Updated Successfully")}
                         >
                           Save Changes
                         </button>
