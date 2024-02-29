@@ -53,7 +53,6 @@ const ProjectList = () => {
   const handleUpdateProject = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      console.log("Data to be submitted:", editedProject);
       const response = await fetch(
         `https://taskify-backend-5v37.onrender.com/projects/${editedProject.id}`,
         {
@@ -122,10 +121,6 @@ const ProjectList = () => {
     }
   };
 
-  const handleCommentChange = (e) => {
-    setCommentInput(e.target.value);
-  };
-
   const handleCommentSubmit = (projectId, commentInput) => {
     fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
       method: "POST",
@@ -152,6 +147,9 @@ const ProjectList = () => {
           message: "Comment added successfully",
           type: "success",
         });
+        setTimeout(() => {
+          setErrorMessage(""); // Clearing error message after 3 seconds
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error submitting comment:", error);
@@ -178,6 +176,9 @@ const ProjectList = () => {
           message: "Comment deleted successfully",
           type: "success",
         });
+        setTimeout(() => {
+          setErrorMessage(""); // Clearing error message after 3 seconds
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error deleting comment:", error);
@@ -203,6 +204,9 @@ const ProjectList = () => {
           message: "Project deleted successfully",
           type: "success",
         });
+        setTimeout(() => {
+          setErrorMessage(""); // Clearing error message after 3 seconds
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error deleting project:", error);

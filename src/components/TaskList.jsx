@@ -89,7 +89,9 @@ const TaskList = () => {
       setComments(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
-      setErrorMessage("Failed to fetch comments");
+      setErrorMessage(
+        "You have not added any progress status/comments for this task"
+      );
       // Set timer to clear error message after 5 seconds
       setTimeout(() => {
         setErrorMessage(null);

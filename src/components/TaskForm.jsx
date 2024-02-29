@@ -33,6 +33,37 @@ const TaskForm = () => {
     fetchProjects();
   }, []);
 
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      const response = await fetch(
+        "https://taskify-backend-5v37.onrender.com/tasks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            ...values,
+            due_date: format(values.due_date, "yyyy-MM-dd"),
+            reminder_date: format(values.reminder_date, "yyyy-MM-dd"),
+          }),
+        }
+      );
+
+      if (response.status === 201) {
+        resetForm();
+        alert("Task Created Successfully");
+      } else {
+        console.error("Task creation failed.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    setSubmitting(false);
+  };
+
   return (
     <div className="bg-cyan-100 min-h-screen flex justify-center items-center">
       <div className="w-full max-w-md">
@@ -74,36 +105,7 @@ const TaskForm = () => {
                 .min(new Date(), "Reminder date cannot be in the past"),
               recurrence_pattern: Yup.string(),
             })}
-            onSubmit={async (values, { setSubmitting, resetForm }) => {
-              try {
-                const accessToken = localStorage.getItem("access_token");
-                const response = await fetch(
-                  "https://taskify-backend-5v37.onrender.com/tasks",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization: `Bearer ${accessToken}`,
-                    },
-                    body: JSON.stringify({
-                      ...values,
-                      due_date: format(values.due_date, "yyyy-MM-dd"),
-                      reminder_date: format(values.reminder_date, "yyyy-MM-dd"),
-                    }),
-                  }
-                );
-
-                if (response.status === 201) {
-                  resetForm();
-                  alert("Task Created Successfully");
-                } else {
-                  console.error("Task creation failed.");
-                }
-              } catch (error) {
-                console.error("Error:", error);
-              }
-              setSubmitting(false);
-            }}
+            onSubmit={handleSubmit}
           >
             {({ values, setFieldValue }) => (
               <Form>
