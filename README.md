@@ -16,12 +16,12 @@ Technologies Used
 ## Frontend
 React: A JavaScript library for building user interfaces, providing a fast and interactive frontend experience.
 JavaScript (ES6+): The latest version of JavaScript enhances Taskify's frontend functionality and interactivity.
-HTML & CSS: Standard web technologies used for structuring and styling the application's user interface.
+HTML & Tailwind CSS: Standard web technologies used for structuring and styling the application's user interface. The Frontend is delpoyed in netlify. 
 ## Backend
 Flask: A lightweight and flexible Python web framework used to develop the backend API for Taskify.
 Python: The backend logic and API endpoints are written in Python, offering a clean and efficient development environment.
 RESTful API: Taskify's backend follows RESTful principles, ensuring a standardized and predictable API interface.
-SQL Database: The backend uses SQL databases to store and manage user data, tasks, and project information.
+SQL Database: The backend uses SQL databases to store and manage user data, tasks, and project information. The Backend is delpoyed in render.
 
 ## Components
 Taskify's frontend comprises various components that work together seamlessly to deliver a smooth user experience:
@@ -35,6 +35,10 @@ TaskForm: Form component for creating and updating tasks.
 ProjectForm: Form component for creating and updating projects.
 AccountDetails: Component for viewing and updating user account details.
 AuthHandler: Component for managing user authentication.
+
+## Technologies Used
+Frontend: React (Javascript), Redux, React Router, Fetch API, and Tailwind CSS for sleek and responsive styling.
+Backend: Flask (Python) and PostgreSQL, Taskify ensures reliability and scalability in data management and retrieval, laying a sturdy foundation for seamless operation.
 ## Usage
 
 To get started with Taskify, simply sign up or log in to your account. Once logged in, you can create tasks, organize them into projects, and manage your account settings. Taskify's intuitive interface makes task management a breeze, allowing you to focus on what matters most - your work.
