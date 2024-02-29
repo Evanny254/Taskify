@@ -211,7 +211,6 @@ const TaskList = () => {
   const handleUpdateTask = async () => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      console.log("Data to be submitted:", editedTask);
       const response = await fetch(
         `https://taskify-backend-5v37.onrender.com/tasks/${editedTask.id}`,
         {
