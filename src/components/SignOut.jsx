@@ -7,10 +7,10 @@ const SignOut = () => {
 
   const handleSignOut = async () => {
     try {
-      const accessToken = localStorage.getItem('access_token');
-      const refreshToken = localStorage.getItem('refresh_token');
+      const access_token = localStorage.getItem('access_token');
+      const refresh_token = localStorage.getItem('refresh_token');
 
-      if (!accessToken || !refreshToken) {
+      if (!access_token || !refresh_token) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         navigate('/signin');
@@ -21,28 +21,28 @@ const SignOut = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`, 
+          'Authorization': `Bearer ${access_token}`, 
         },
-        body: JSON.stringify({ refreshToken }), 
+        body: JSON.stringify({ refresh_token }), 
       });
 
       if (response.ok) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         alert('User Signed Out Successfully')
         navigate('/signin');
       } else {
         const data = await response.json();
         console.error('Error signing out:', data);
       
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         navigate('/signin');
       }
     } catch (error) {
       console.error('Error signing out:', error);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       navigate('/signin');
     }
   };
