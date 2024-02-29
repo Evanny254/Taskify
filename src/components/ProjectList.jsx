@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 const formatDate = (date) => {
   if (!date) return null;
@@ -23,7 +26,7 @@ const ProjectList = () => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("http://127.0.0.1:5000/projects", {
+        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -49,7 +52,7 @@ const ProjectList = () => {
       const accessToken = localStorage.getItem("access_token");
       console.log("Data to be submitted:", editedProject);
       const response = await fetch(
-        `http://127.0.0.1:5000/projects/${editedProject.id}`,
+        `https://taskify-backend-5v37.onrender.com/projects/${editedProject.id}`,
         {
           method: "PUT",
           headers: {
@@ -91,7 +94,7 @@ const ProjectList = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://127.0.0.1:5000/projectcomments/${projectId}`,
+        `https://taskify-backend-5v37.onrender.com/projectcomments/${projectId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -120,7 +123,7 @@ const ProjectList = () => {
   };
 
   const handleCommentSubmit = (projectId, commentInput) => {
-    fetch(`http://127.0.0.1:5000/comments`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -148,7 +151,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteComment = (commentId) => {
-    fetch(`http://127.0.0.1:5000/comments/${commentId}`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/comments/${commentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -166,7 +169,7 @@ const ProjectList = () => {
   };
 
   const handleDeleteProject = (projectId) => {
-    fetch(`http://127.0.0.1:5000/projects/${projectId}`, {
+    fetch(`https://taskify-backend-5v37.onrender.com/projects/${projectId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -209,11 +212,12 @@ const ProjectList = () => {
                 <div key={comment.id} className="mb-2">
                   <p className="text-gray-700">{comment.text}</p>
                   <button
-                    className="text-red-500 hover:text-red-700"
-                    onClick={() => handleDeleteComment(comment.id)}
-                  >
-                    Delete Comment
-                  </button>
+  className="text-red-500 hover:text-red-700 focus:outline-none"
+  onClick={() => handleDeleteComment(comment.id)}
+>
+  <FontAwesomeIcon icon={faTrash} />
+</button>
+
                 </div>
               ))}
               <Formik
@@ -223,19 +227,21 @@ const ProjectList = () => {
                   resetForm();
                 }}
               >
-                <Form className="flex mt-2">
-                  <Field
-                    type="text"
-                    name="comment"
-                    className="border border-cyan-500 rounded p-2 w-full"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2"
-                  >
-                    Add Comment
-                  </button>
-                </Form>
+                <Form className="flex mt-2 bg-gray-100 rounded-lg p-2">
+<Field
+    type="text"
+    name="comment"
+    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
+    placeholder="Add a comment..."
+  />
+  <button
+    type="submit"
+    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
+  >
+    Add Comment
+  </button>
+</Form>
+
               </Formik>
 
               <button
@@ -352,6 +358,7 @@ const ProjectList = () => {
                       <button
                         type="submit"
                         className="bg-cyan-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        onClick={() => alert("Project Updated Successfully")}
                       >
                         Save Changes
                       </button>

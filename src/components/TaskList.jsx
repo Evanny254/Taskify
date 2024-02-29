@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
@@ -14,7 +17,7 @@ const TaskList = () => {
     const fetchProjects = async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        const response = await fetch("http://127.0.0.1:5000/projects", {
+        const response = await fetch("https://taskify-backend-5v37.onrender.com/projects", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -36,7 +39,7 @@ const TaskList = () => {
 
   const fetchTasks = async (accessToken) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/tasks", {
+      const response = await fetch("https://taskify-backend-5v37.onrender.com/tasks", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -54,7 +57,7 @@ const TaskList = () => {
   const fetchComments = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`http://127.0.0.1:5000/comments/${taskId}`, {
+      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments/${taskId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -82,7 +85,7 @@ const TaskList = () => {
   const handleCommentSubmit = async (taskId, comment) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      const response = await fetch(`http://127.0.0.1:5000/comments`, {
+      const response = await fetch(`https://taskify-backend-5v37.onrender.com/comments`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -107,7 +110,7 @@ const TaskList = () => {
   const handleDeleteComment = async (commentId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      await fetch(`http://127.0.0.1:5000/comments/${commentId}`, {
+      await fetch(`https://taskify-backend-5v37.onrender.com/comments/${commentId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -125,7 +128,7 @@ const TaskList = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const accessToken = localStorage.getItem("access_token");
-      await fetch(`http://127.0.0.1:5000/tasks/${taskId}`, {
+      await fetch(`https://taskify-backend-5v37.onrender.com/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -146,7 +149,7 @@ const TaskList = () => {
       const accessToken = localStorage.getItem("access_token");
       console.log("Data to be submitted:", editedTask);
       const response = await fetch(
-        `http://127.0.0.1:5000/tasks/${editedTask.id}`,
+        `https://taskify-backend-5v37.onrender.com/tasks/${editedTask.id}`,
         {
           method: "PUT",
           headers: {
@@ -226,11 +229,12 @@ const TaskList = () => {
                   <div key={comment.id} className="mb-2">
                     <p className="text-gray-700">{comment.text}</p>
                     <button
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      Delete Comment
-                    </button>
+  className="text-red-500 hover:text-red-700 focus:outline-none"
+  onClick={() => handleDeleteComment(comment.id)}
+>
+  <FontAwesomeIcon icon={faTrash} />
+</button>
+
                   </div>
                 ))}
               <Formik
@@ -240,19 +244,21 @@ const TaskList = () => {
                   resetForm();
                 }}
               >
-                <Form className="flex mt-2">
-                  <Field
-                    type="text"
-                    name="comment"
-                    className="border border-cyan-500 rounded p-2 w-full"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2"
-                  >
-                    Add Comment
-                  </button>
-                </Form>
+                <Form className="flex mt-2 bg-gray-100 rounded-lg p-2">
+  <Field
+    type="text"
+    name="comment"
+    className="border border-gray-300 rounded p-2 w-full focus:border-cyan-500 focus:outline-none"
+    placeholder="Add a comment..."
+  />
+  <button
+    type="submit"
+    className="bg-cyan-500 text-white font-semibold px-4 py-2 rounded ml-2 hover:bg-cyan-600 focus:outline-none focus:ring focus:ring-cyan-300"
+  >
+    Add Comment
+  </button>
+</Form>
+
               </Formik>
               <button
                 onClick={() => handleDeleteTask(task.id)}
@@ -494,6 +500,7 @@ const TaskList = () => {
                         <button
                           type="submit"
                           className="bg-cyan-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                          onClick={() => alert("Task Updated Successfully")}
                         >
                           Save Changes
                         </button>

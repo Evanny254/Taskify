@@ -19,7 +19,7 @@ const SignIn = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5000/login",
+        "https://taskify-backend-5v37.onrender.com/login",
         {
           username: username,
           password: password,
@@ -90,6 +90,7 @@ const SignIn = () => {
           <button
             type="submit"
             className="bg-cyan-500 text-white font-semibold py-4 w-1/2 mx-auto rounded-lg"
+            onClick={() => alert("Sign In Successfully")}
           >
             SignIn
           </button>
@@ -107,4 +108,3 @@ const SignIn = () => {
 
 export default SignIn;
 
-/*Authorization: `Bearer ${accessToken}`*/

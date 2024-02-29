@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaTasks, FaPlusSquare, FaProjectDiagram, FaUser, FaSignOutAlt, FaInfoCircle } from 'react-icons/fa';
+import { FaHome, FaTasks, FaPlusSquare, FaProjectDiagram, FaUser, FaInfoCircle, FaFilePdf } from 'react-icons/fa';
 import SignOut from './SignOut';
 
 const NavBar = () => {
@@ -35,6 +35,10 @@ const NavBar = () => {
 
           <Link to="/about" className="text-white hover:text-cyan-200">
             <FaInfoCircle className="text-2xl" />
+          </Link>
+
+          <Link to="/taskreport" className="text-white hover:text-cyan-200">
+            <FaFilePdf className="text-2xl" />
           </Link>
 
           <SignOut />
