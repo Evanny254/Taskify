@@ -69,6 +69,7 @@ const TaskList = () => {
       setComments(data.comments);
     } catch (error) {
       console.error("Error fetching comments:", error);
+      setComments([]);
     }
   };
 
