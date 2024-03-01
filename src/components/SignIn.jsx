@@ -44,6 +44,10 @@ const SignIn = () => {
           "An error occurred while signing in. Please try again later."
         );
       }
+ setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      
     }
   };
 
