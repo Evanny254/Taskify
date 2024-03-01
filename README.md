@@ -23,6 +23,9 @@ Python: The backend logic and API endpoints are written in Python, offering a cl
 RESTful API: Taskify's backend follows RESTful principles, ensuring a standardized and predictable API interface.
 SQL Database: The backend uses SQL databases to store and manage user data, tasks, and project information. The Backend is delpoyed in render.
 
+## Backend Repository
+Here is the link to our Backend Repository: https://github.com/Evanny254/Taskify-Backend
+
 ## Components
 Taskify's frontend comprises various components that work together seamlessly to deliver a smooth user experience:
 
