@@ -16,12 +16,12 @@ Technologies Used
 ## Frontend
 React: A JavaScript library for building user interfaces, providing a fast and interactive frontend experience.
 JavaScript (ES6+): The latest version of JavaScript enhances Taskify's frontend functionality and interactivity.
-HTML & Tailwind CSS: Standard web technologies used for structuring and styling the application's user interface. The Frontend is delpoyed in netlify. 
+HTML & Tailwind CSS: Standard web technologies used for structuring and styling the application's user interface. The Frontend is deployed in vercel, 
 ## Backend
 Flask: A lightweight and flexible Python web framework used to develop the backend API for Taskify.
 Python: The backend logic and API endpoints are written in Python, offering a clean and efficient development environment.
 RESTful API: Taskify's backend follows RESTful principles, ensuring a standardized and predictable API interface.
-SQL Database: The backend uses SQL databases to store and manage user data, tasks, and project information. The Backend is delpoyed in render.
+SQL Database: The backend uses SQL databases to store and manage user data, tasks, and project information. The Backend is delpoyed in render, "https://taskify-backend-5v37.onrender.com".
 
 ## Components
 Taskify's frontend comprises various components that work together seamlessly to deliver a smooth user experience:
